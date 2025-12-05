@@ -133,27 +133,3 @@ finalproject_risikostroke/
 
 ---
 
-## 👨‍💻 Developer
-
-**Final Project – Rekayasa Kecerdasan Artifisial**
-
-Dikembangkan oleh:
-- **Fahmialfayadh**
-- **Team**
-
----
-
-## 📝 Lisensi
-
-Project ini dibuat untuk keperluan akademik Final Project mata kuliah Rekayasa Kecerdasan Artifisial.
-
----
-
-## 📞 Kontak
-
-Jika ada pertanyaan atau masalah, silakan hubungi developer melalui:
-- GitHub: [@Fahmialfayadh](https://github.com/Fahmialfayadh)
-
----
-
-**© 2024 - Aplikasi Prediksi Risiko Stroke**
