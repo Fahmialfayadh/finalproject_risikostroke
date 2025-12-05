@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="POST" action="{{ url_for('result') }}">
+
+    <section class="section-card">
+        <div class="section-header">
+            <h2 class="section-title">Patient information</h2>
+            <p class="section-subtitle">
+                Basic demographic and physiological measurements.
+            </p>
+        </div>
+
+        <div class="section-row">
+            <div class="field-block">
+                <label>Age</label>
+                <input type="number" name="age" value="25" min="1" max="120" required>
+            </div>
+
+            <div class="field-block">
+                <label>Gender</label>
+                <select name="gender">
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section-row">
+            <div class="field-block">
+                <label>Weight (kg)</label>
+                <input type="number" name="weight" value="70" step="0.1" required>
+            </div>
+
+            <div class="field-block">
+                <label>Height (cm)</label>
+                <input type="number" name="height" value="170" step="0.1" required>
+            </div>
+        </div>
+
+        <div class="section-row">
+            <div class="field-block full">
+                <label>Average glucose (mg/dL)</label>
+                <input type="number" name="glucose" value="110" step="0.1" required>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-card">
+        <div class="section-header">
+            <h2 class="section-title">Lifestyle & profile</h2>
+            <p class="section-subtitle">
+                Socio-demographic and exposure-related characteristics.
+            </p>
+        </div>
+
+        <div class="section-row">
+            <div class="field-block">
+                <label>Ever married</label>
+                <select name="ever_married">
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+            </div>
+
+            <div class="field-block">
+                <label>Residence</label>
+                <select name="residence">
+                    <option>Urban</option>
+                    <option>Rural</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section-row">
+            <div class="field-block">
+                <label>Work type</label>
+                <select name="work_type">
+                    <option>Private</option>
+                    <option>Self-employed</option>
+                    <option>Govt_job</option>
+                    <option>children</option>
+                    <option>Never_worked</option>
+                </select>
+            </div>
+
+            <div class="field-block">
+                <label>Smoking status</label>
+                <select name="smoking">
+                    <option>never smoked</option>
+                    <option>formerly smoked</option>
+                    <option>smokes</option>
+                    <option>Unknown</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <div class="action-area">
+        <div class="action-text">
+            The risk score is calculated from the information above using a calibrated logistic regression model.
+        </div>
+        <button type="submit" class="btn-primary-wide">Calculate risk</button>
+    </div>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stroke Risk Calculator</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="page-hero">
+        <div class="hero-inner">
+            <div>
+                <h1 class="hero-title">Stroke Risk Calculator</h1>
+                <p class="hero-subtitle">
+                    Web-based risk estimation using logistic regression and Weight of Evidence. 
+                    Designed for exploratory assessment of individual stroke risk profiles.
+                </p>
+            </div>
+            <div class="hero-tag">
+                Prototype model · Not a diagnostic tool
+            </div>
+        </div>
+    </header>
+
+    <main class="main-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="disclaimer">
+        This application provides an estimated risk score based on the entered data and is not intended to be used as a
+        substitute for medical diagnosis, clinical judgment, or treatment decisions.
+    </footer>
+
+</body>
+</html>

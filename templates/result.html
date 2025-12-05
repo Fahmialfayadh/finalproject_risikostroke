@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="result-card">
+    <div class="section-header">
+        <h2 class="section-title">Risk summary</h2>
+        <p class="section-subtitle">
+            Estimated probability of stroke given the submitted profile.
+        </p>
+    </div>
+
+    <div class="result-main">
+        <div class="result-number">{{ (prob * 100) | round(1) }}%</div>
+        <div class="result-label">Estimated stroke risk</div>
+        <div class="result-level level-{{ level | lower }}">
+            {{ level }} risk category
+        </div>
+
+        <div class="gauge">
+            <div class="gauge-fill" style="width: {{ (prob * 100) }}%;"></div>
+        </div>
+
+        <div class="result-note">
+            This value reflects the model’s predicted probability based on your inputs. It does not represent an absolute
+            risk and should always be interpreted in context of clinical evaluation.
+        </div>
+    </div>
+
+    <div class="detail-grid">
+        <div><span class="detail-label">BMI</span> <span class="detail-value">{{ bmi | round(1) }}</span></div>
+        <div><span class="detail-label">Age category</span> <span class="detail-value">{{ bins[0] }}</span></div>
+        <div><span class="detail-label">Glucose category</span> <span class="detail-value">{{ bins[1] }}</span></div>
+        <div><span class="detail-label">BMI category</span> <span class="detail-value">{{ bins[2] }}</span></div>
+    </div>
+</section>
+
+<section class="detail-card">
+    <div class="detail-header">
+        <h3 class="detail-title">Model feature contributions</h3>
+        <p class="detail-subtitle">
+            Linear contributions of each feature (coefficient × WOE) to the logit score.
+        </p>
+    </div>
+
+    <table class="detail-table">
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Contribution</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for k, v in contrib.items() %}
+            <tr>
+                <td>{{ k }}</td>
+                <td>{{ v | round(4) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}
