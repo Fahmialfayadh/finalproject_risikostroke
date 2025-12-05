@@ -11,3 +11,11 @@ source venv/bin/activate   # Linux/Mac
 venv\Scripts\activate      # Windows
 
 pip install -r requirements.txt
+
+
+baru nanti tinggal ke app.py lalu run python
+atau bisa dengan tulis di terminal:
+python app.py
+
+
+okeeee
