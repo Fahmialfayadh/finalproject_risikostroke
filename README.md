@@ -14,73 +14,96 @@ Aplikasi web berbasis Flask untuk memprediksi risiko stroke menggunakan Machine 
 
 ---
 
-## 🚀 Instalasi
+## 🚀 Cara Install dan Jalankan Aplikasi
 
-### 1️⃣ Clone Repository
+### **LANGKAH 1: Download Project**
+
+Buka **Command Prompt** atau **Terminal**, lalu ketik:
 
 ```bash
 git clone https://github.com/Fahmialfayadh/finalproject_risikostroke.git
 cd finalproject_risikostroke
 ```
 
-### 2️⃣ Buka Project di VSCode
+**Penjelasan:**
+- Perintah pertama = download project dari GitHub
+- Perintah kedua = masuk ke folder project
 
-**Jika perintah `code` sudah terpasang di PATH:**
+---
 
-```bash
-code .
-```
+### **LANGKAH 2: Buka Project di VSCode**
 
-**Jika belum bisa:**
+#### **Cara 1 (Langsung buka):**
 
-1. Buka VSCode
-2. Tekan `Ctrl + Shift + P` (Windows/Linux) atau `Cmd + Shift + P` (Mac)
-3. Pilih: `Shell Command: Install 'code' command in PATH`
-4. Tekan Enter
-5. Ulangi perintah:
+Kalau sudah di dalam folder project, ketik:
 
 ```bash
 code .
 ```
 
-### 3️⃣ Install Dependencies
+#### **Cara 2 (Manual):**
 
-**Cara cepat:**
+1. Buka aplikasi **VSCode**
+2. Klik **File** → **Open Folder**
+3. Pilih folder `finalproject_risikostroke`
+4. Klik **Select Folder**
+
+---
+
+### **LANGKAH 3: Install Python Libraries**
+
+Di dalam VSCode, buka **Terminal** (Menu: Terminal → New Terminal), lalu ketik:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**Kalau error atau tidak bisa install, gunakan virtual environment:**
+**Kalau muncul error "pip not found" atau gagal install:**
 
 ```bash
-# Buat virtual environment
-python3 -m venv venv
+python -m pip install -r requirements.txt
+```
 
-# Aktivasi virtual environment
-source venv/bin/activate   # Linux/Mac
-venv\Scripts\activate      # Windows
+**Kalau masih error, pakai virtual environment:**
 
-# Install dependencies
+```bash
+python -m venv venv
+venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
 ---
 
-## ▶️ Cara Menjalankan
+### **LANGKAH 4: Jalankan Aplikasi**
 
-### Via VSCode
+#### **Cara 1 (Pakai Terminal di VSCode):**
 
-1. Buka file `app.py`
-2. Klik tombol **Run** di pojok kanan atas
-
-### Via Terminal
+Ketik perintah ini di Terminal:
 
 ```bash
 python app.py
 ```
 
-Aplikasi akan berjalan di: `http://127.0.0.1:5000/`
+Tunggu sampai muncul tulisan seperti ini:
+
+```
+* Running on http://127.0.0.1:5000
+```
+
+Lalu buka browser dan ketik: **http://127.0.0.1:5000**
+
+#### **Cara 2 (Pakai Tombol Run di VSCode):**
+
+1. Buka file **app.py**
+2. Klik tombol **▶ Run** di pojok kanan atas
+3. Tunggu sampai aplikasi jalan
+4. Buka browser: **http://127.0.0.1:5000**
+
+---
+
+### **LANGKAH 5: Stop Aplikasi**
+
+Untuk stop aplikasi, tekan **Ctrl + C** di Terminal
 
 ---
 
@@ -109,3 +132,28 @@ finalproject_risikostroke/
 - **HTML/CSS/JavaScript** - Frontend
 
 ---
+
+## 👨‍💻 Developer
+
+**Final Project – Rekayasa Kecerdasan Artifisial**
+
+Dikembangkan oleh:
+- **Fahmialfayadh**
+- **Team**
+
+---
+
+## 📝 Lisensi
+
+Project ini dibuat untuk keperluan akademik Final Project mata kuliah Rekayasa Kecerdasan Artifisial.
+
+---
+
+## 📞 Kontak
+
+Jika ada pertanyaan atau masalah, silakan hubungi developer melalui:
+- GitHub: [@Fahmialfayadh](https://github.com/Fahmialfayadh)
+
+---
+
+**© 2024 - Aplikasi Prediksi Risiko Stroke**
