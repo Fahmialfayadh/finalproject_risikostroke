@@ -30,7 +30,7 @@ woe_work = {"Private": 0.040421, "Self-employed": 0.518065, "Govt_job": 0.036665
             "children": -2.651787, "Never_worked": -0.844592}
 woe_resid = {"Rural": -0.075113, "Urban": 0.068190}
 woe_smk = {"never smoked": -0.027622, "formerly smoked": 0.515769,
-           "smokes": 0.096728, "Unknown": -0.486865}
+            "smokes": 0.096728, "Unknown": -0.486865}
 
 # ===========================
 #        BINNING

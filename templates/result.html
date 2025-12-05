@@ -1,7 +1,13 @@
+<!-- ============================================ -->
+<!-- BAGIAN RESULT             -->
+<!-- ============================================ -->
 {% extends "base.html" %}
 
 {% block content %}
 
+<!-- ============================================ -->
+<!-- SECTION: RINGKASAN HASIL RISIKO             -->
+<!-- ============================================ -->
 <section class="result-card">
     <div class="section-header">
         <h2 class="section-title">Risk summary</h2>
@@ -9,24 +15,36 @@
             Estimated probability of stroke given the submitted profile.
         </p>
     </div>
-
+    
+    <!-- ============================================ -->
+    <!-- HASIL UTAMA: Persentase & Level Risiko      -->
+    <!-- ============================================ -->
     <div class="result-main">
+        <!-- Tampilkan probabilitas dalam persen (dibulatkan 1 desimal) -->
         <div class="result-number">{{ (prob * 100) | round(1) }}%</div>
+        
         <div class="result-label">Estimated stroke risk</div>
+        
+        <!-- Level risiko (Low/Medium/High) dengan class dinamis -->
         <div class="result-level level-{{ level | lower }}">
             {{ level }} risk category
         </div>
-
+        
+        <!-- Gauge bar visual untuk menampilkan risiko -->
         <div class="gauge">
             <div class="gauge-fill" style="width: {{ (prob * 100) }}%;"></div>
         </div>
-
+        
+        <!-- Catatan penting tentang interpretasi hasil -->
         <div class="result-note">
-            This value reflects the model’s predicted probability based on your inputs. It does not represent an absolute
+            This value reflects the model's predicted probability based on your inputs. It does not represent an absolute
             risk and should always be interpreted in context of clinical evaluation.
         </div>
     </div>
-
+    
+    <!-- ============================================ -->
+    <!-- DETAIL GRID: BMI & Kategori                 -->
+    <!-- ============================================ -->
     <div class="detail-grid">
         <div><span class="detail-label">BMI</span> <span class="detail-value">{{ bmi | round(1) }}</span></div>
         <div><span class="detail-label">Age category</span> <span class="detail-value">{{ bins[0] }}</span></div>
@@ -35,6 +53,9 @@
     </div>
 </section>
 
+<!-- ============================================ -->
+<!-- SECTION: KONTRIBUSI FITUR MODEL             -->
+<!-- ============================================ -->
 <section class="detail-card">
     <div class="detail-header">
         <h3 class="detail-title">Model feature contributions</h3>
@@ -42,7 +63,8 @@
             Linear contributions of each feature (coefficient × WOE) to the logit score.
         </p>
     </div>
-
+    
+    <!-- Tabel kontribusi setiap fitur -->
     <table class="detail-table">
         <thead>
             <tr>
@@ -51,6 +73,7 @@
             </tr>
         </thead>
         <tbody>
+            <!-- Loop semua fitur dan kontribusinya -->
             {% for k, v in contrib.items() %}
             <tr>
                 <td>{{ k }}</td>

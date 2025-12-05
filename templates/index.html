@@ -1,9 +1,18 @@
+<!-- ============================================ -->
+<!-- EXTENDS BASE TEMPLATE                       -->
+<!-- ============================================ -->
 {% extends "base.html" %}
 
 {% block content %}
 
+<!-- ============================================ -->
+<!-- FORM PREDIKSI STROKE                        -->
+<!-- ============================================ -->
 <form method="POST" action="{{ url_for('result') }}">
-
+    
+    <!-- ============================================ -->
+    <!-- SECTION 1: INFORMASI PASIEN                 -->
+    <!-- ============================================ -->
     <section class="section-card">
         <div class="section-header">
             <h2 class="section-title">Patient information</h2>
@@ -11,13 +20,13 @@
                 Basic demographic and physiological measurements.
             </p>
         </div>
-
+        
+        <!-- ROW 1: Age & Gender -->
         <div class="section-row">
             <div class="field-block">
                 <label>Age</label>
                 <input type="number" name="age" value="25" min="1" max="120" required>
             </div>
-
             <div class="field-block">
                 <label>Gender</label>
                 <select name="gender">
@@ -27,19 +36,20 @@
                 </select>
             </div>
         </div>
-
+        
+        <!-- ROW 2: Weight & Height -->
         <div class="section-row">
             <div class="field-block">
                 <label>Weight (kg)</label>
                 <input type="number" name="weight" value="70" step="0.1" required>
             </div>
-
             <div class="field-block">
                 <label>Height (cm)</label>
                 <input type="number" name="height" value="170" step="0.1" required>
             </div>
         </div>
-
+        
+        <!-- ROW 3: Glucose Level -->
         <div class="section-row">
             <div class="field-block full">
                 <label>Average glucose (mg/dL)</label>
@@ -48,6 +58,9 @@
         </div>
     </section>
 
+    <!-- ============================================ -->
+    <!-- SECTION 2: GAYA HIDUP & PROFIL              -->
+    <!-- ============================================ -->
     <section class="section-card">
         <div class="section-header">
             <h2 class="section-title">Lifestyle & profile</h2>
@@ -55,7 +68,8 @@
                 Socio-demographic and exposure-related characteristics.
             </p>
         </div>
-
+        
+        <!-- ROW 1: Marriage & Residence -->
         <div class="section-row">
             <div class="field-block">
                 <label>Ever married</label>
@@ -64,7 +78,6 @@
                     <option>No</option>
                 </select>
             </div>
-
             <div class="field-block">
                 <label>Residence</label>
                 <select name="residence">
@@ -73,7 +86,8 @@
                 </select>
             </div>
         </div>
-
+        
+        <!-- ROW 2: Work Type & Smoking -->
         <div class="section-row">
             <div class="field-block">
                 <label>Work type</label>
@@ -85,7 +99,6 @@
                     <option>Never_worked</option>
                 </select>
             </div>
-
             <div class="field-block">
                 <label>Smoking status</label>
                 <select name="smoking">
@@ -98,13 +111,16 @@
         </div>
     </section>
 
+    <!-- ============================================ -->
+    <!-- TOMBOL SUBMIT                               -->
+    <!-- ============================================ -->
     <div class="action-area">
         <div class="action-text">
             The risk score is calculated from the information above using a calibrated logistic regression model.
         </div>
         <button type="submit" class="btn-primary-wide">Calculate risk</button>
     </div>
-
+    
 </form>
 
 {% endblock %}
