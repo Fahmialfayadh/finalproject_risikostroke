@@ -15,11 +15,8 @@ ADMIN_PASSWORD = "fpmatdiskeren"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///stroke.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
-
-@app.route("/initdb")
-def initdb():
+with app.app_context():
     db.create_all()
-    return "Database initialized!"
 
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
