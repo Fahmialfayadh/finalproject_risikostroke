@@ -2,6 +2,7 @@ import math
 from flask import Flask, redirect, render_template, request, session
 from models import db, StrokeInput
 from flask import make_response
+import json
 
 
 
@@ -60,50 +61,60 @@ def admin():
 # ===========================
 #   VIEW DETAIL RECORD
 
+def calculate_level(prob):
+    if prob < 0.03:
+        return "Low"
+    elif prob < 0.08:
+        return "Medium"
+    else:
+        return "High"
+
+
+
 @app.route("/admin/view/<int:id>")
 def admin_view(id):
     if not session.get("admin"):
         return redirect("/admin/login")
 
     r = StrokeInput.query.get(id)
+    if not r:
+        return "Record not found", 404
 
-    # convert StrokeInput → format yang dipakai oleh result.html
+    # Muat JSON bins & contrib dari database
+    bins = json.loads(r.bins) if r.bins else ["-", "-", "-"]
+    contrib = json.loads(r.contrib) if r.contrib else {}
+
+    # Persiapkan data_input seperti form asli
     data_input = {
         "name": r.name,
         "age": r.age,
         "gender": r.gender,
         "glucose": r.glucose,
         "smoking": r.smoking,
-        # field lain optional
+        "weight": r.weight,
+        "height": r.height,
+        "ever_married": r.ever_married,
+        "work_type": r.work_type,
+        "residence": r.residence,
     }
 
-    # langsung hitung ulang dengan fungsi calc yg sudah ada
-    prob, level, bmi, bins, contrib = calc({
-        "name": r.name,
-        "age": r.age,
-        "weight": 70,   # placeholder jika data tidak ada
-        "height": 170,
-        "glucose": r.glucose,
-        "gender": r.gender,
-        "ever_married": "No",
-        "work_type": "Private",
-        "residence": "Urban",
-        "smoking": r.smoking
-    })
-
-    response = make_response(render_template("result.html",
-                                             prob=prob,
-                                             level=level,
-                                             bmi=bmi,
-                                             bins=bins,
-                                             contrib=contrib,
-                                             data=data_input))
+    response = make_response(render_template(
+        "result.html",
+        prob=r.prediction,
+        level=calculate_level(r.prediction),
+        bmi=r.bmi,
+        bins=bins,
+        contrib=contrib,
+        data=data_input
+    ))
 
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "0"
 
     return response
+
+
 
 @app.route("/admin/delete/<int:id>")
 def admin_delete(id):
@@ -217,7 +228,7 @@ def calc(data):
         level = "Moderate"
     else:
         level = "High"
-
+    
     return prob, level, bmi, (a_bin, g_bin, b_bin), contrib
 
 
@@ -232,7 +243,7 @@ def index():
 def predict():
     form = request.form
 
-    # Input aman
+    # Ambil input dari user
     data_input = {
         "name": form.get("name", ""),
         "age": float(form.get("age", 0)),
@@ -244,28 +255,38 @@ def predict():
         "work_type": form.get("work_type", "Private"),
         "residence": form.get("residence", "Urban"),
         "smoking": form.get("smoking", "Unknown"),
+        "hypertension": int(form.get("hypertension", 0)),
+        "heart_disease": int(form.get("heart_disease", 0)),
     }
 
-    # Hitung prediksi WOE
+    # Hitung model
     prob, level, bmi, bins, contrib = calc(data_input)
 
-    # Simpan kalau user klik save
+    # Jika user memilih SAVE, baru simpan ke database
     if form.get("save") == "yes":
-        record = StrokeInput(
+        entry = StrokeInput(
             name=data_input["name"],
             age=data_input["age"],
             gender=data_input["gender"],
-            hypertension=int(form.get("hypertension", 0)),
-            heart_disease=int(form.get("heart_disease", 0)),
+            hypertension=data_input["hypertension"],
+            heart_disease=data_input["heart_disease"],
             glucose=data_input["glucose"],
             bmi=bmi,
             smoking=data_input["smoking"],
-            prediction=float(prob)
+            weight=data_input["weight"],
+            height=data_input["height"],
+            ever_married=data_input["ever_married"],
+            work_type=data_input["work_type"],
+            residence=data_input["residence"],
+            prediction=prob,
+            bins=json.dumps(bins),
+            contrib=json.dumps(contrib)
         )
-        db.session.add(record)
+
+        db.session.add(entry)
         db.session.commit()
 
-
+    # Tampilkan hasil prediksi
     return render_template(
         "result.html",
         prob=prob,
@@ -276,10 +297,9 @@ def predict():
         data=data_input
     )
 
-
 # =================================
 #         ALGORITMA REKURSIF
-# =================================
+# ================================= 
 
 # ============
 #   SORTING (fungsinya ada di file utils.py)

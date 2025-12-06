@@ -12,15 +12,14 @@ class StrokeInput(db.Model):
     glucose = db.Column(db.Float)
     bmi = db.Column(db.Float)
     smoking = db.Column(db.String(50))
-    prediction = db.Column(db.Float)  # nilai prediksi risiko
+    prediction = db.Column(db.Float)
+    weight = db.Column(db.Float)
+    height = db.Column(db.Float)
+    ever_married = db.Column(db.String(20))
+    work_type = db.Column(db.String(50))
+    residence = db.Column(db.String(50))
+    bins = db.Column(db.Text)      # JSON
+    contrib = db.Column(db.Text)   # JSON
 
-    def __init__(self,name, age, gender, hypertension, heart_disease, glucose, bmi, smoking, prediction):
-        self.name = name
-        self.age = age
-        self.gender = gender
-        self.hypertension = hypertension
-        self.heart_disease = heart_disease
-        self.glucose = glucose
-        self.bmi = bmi
-        self.smoking = smoking
-        self.prediction = prediction
+    # nilai prediksi risiko
+
