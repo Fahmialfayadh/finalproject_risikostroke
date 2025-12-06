@@ -140,7 +140,7 @@ select:focus {
     background: #d68c02;
     color: #ffffff;
     border: none;
-    padding: 10px 22px;
+    padding: 12px 25px;
     border-radius: 999px;
     font-size: 14px;
     font-weight: 500;
@@ -148,6 +148,22 @@ select:focus {
 }
 
 .btn-primary-wide:hover {
+    background: #d8d8d8;
+}
+
+
+.btn-secondary-wide {
+    background: #0d5466;
+    color: #ffffff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn-secondary-wide:hover {
     background: #d8d8d8;
 }
 
