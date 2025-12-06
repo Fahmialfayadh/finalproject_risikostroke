@@ -4,6 +4,7 @@ db = SQLAlchemy()
 
 class StrokeInput(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
     age = db.Column(db.Integer)
     gender = db.Column(db.String(10))
     hypertension = db.Column(db.Integer)
@@ -13,7 +14,8 @@ class StrokeInput(db.Model):
     smoking = db.Column(db.String(50))
     prediction = db.Column(db.Float)  # nilai prediksi risiko
 
-    def __init__(self, age, gender, hypertension, heart_disease, glucose, bmi, smoking, prediction):
+    def __init__(self,name, age, gender, hypertension, heart_disease, glucose, bmi, smoking, prediction):
+        self.name = name
         self.age = age
         self.gender = gender
         self.hypertension = hypertension

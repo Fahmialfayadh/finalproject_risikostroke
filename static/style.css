@@ -334,3 +334,35 @@ select:focus {
         width: 100%;
     }
 }
+.name-block {
+    margin: 20px 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.name-value {
+    font-family: 'Arial Black', sans-serif;
+    color : #f3a600;    
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.admin-topbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.logout-btn {
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.15s;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+}

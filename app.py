@@ -1,15 +1,124 @@
 import math
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request, session
 from models import db, StrokeInput
+from flask import make_response
+
+
 
 app = Flask(__name__)
-
+# password admin
+app.secret_key = "matdishebat"
+ADMIN_PASSWORD = "fpmatdiskeren"
 # ===========================
 #  DATABASE CONFIG
 # ===========================
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///stroke.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
+
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+    if request.method == "POST":
+        pw = request.form.get("password", "")
+        if pw == ADMIN_PASSWORD:
+            session["admin"] = True
+            return redirect("/admin")
+        return "Wrong admin password."
+
+    return render_template("admin_login.html")
+
+@app.route("/admin")
+def admin():
+    if not session.get("admin"):
+        return redirect("/admin/login")
+
+    # ambil data
+    sort_key = request.args.get("sort", "prediction")
+    order = request.args.get("order", "desc")
+    reverse = (order == "desc")
+
+    records = StrokeInput.query.all()
+    sorted_records = merge_sort(records, sort_key, reverse)
+
+    # render template
+    response = make_response(render_template(
+        "admin_panel.html",
+        data=sorted_records,
+        sort_key=sort_key,
+        order=order
+    ))
+
+    # blok browser cache
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+
+    return response
+
+# ===========================
+#   VIEW DETAIL RECORD
+
+@app.route("/admin/view/<int:id>")
+def admin_view(id):
+    if not session.get("admin"):
+        return redirect("/admin/login")
+
+    r = StrokeInput.query.get(id)
+
+    # convert StrokeInput → format yang dipakai oleh result.html
+    data_input = {
+        "name": r.name,
+        "age": r.age,
+        "gender": r.gender,
+        "glucose": r.glucose,
+        "smoking": r.smoking,
+        # field lain optional
+    }
+
+    # langsung hitung ulang dengan fungsi calc yg sudah ada
+    prob, level, bmi, bins, contrib = calc({
+        "name": r.name,
+        "age": r.age,
+        "weight": 70,   # placeholder jika data tidak ada
+        "height": 170,
+        "glucose": r.glucose,
+        "gender": r.gender,
+        "ever_married": "No",
+        "work_type": "Private",
+        "residence": "Urban",
+        "smoking": r.smoking
+    })
+
+    response = make_response(render_template("result.html",
+                                             prob=prob,
+                                             level=level,
+                                             bmi=bmi,
+                                             bins=bins,
+                                             contrib=contrib,
+                                             data=data_input))
+
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+
+    return response
+
+@app.route("/admin/delete/<int:id>")
+def admin_delete(id):
+    if not session.get("admin"):
+        return redirect("/admin/login")
+
+    record = StrokeInput.query.get(id)
+    if record:
+        db.session.delete(record)
+        db.session.commit()
+
+    return redirect("/admin")
+
+@app.route("/admin/logout")
+def admin_logout():
+    session.pop("admin", None)   # hapus session admin
+    return redirect("/")
 
 # ===========================
 #  MODEL PARAMS (LOGISTIC WOE)
@@ -123,6 +232,7 @@ def predict():
 
     # Input aman
     data_input = {
+        "name": form.get("name", ""),
         "age": float(form.get("age", 0)),
         "weight": float(form.get("weight", 0)),
         "height": float(form.get("height", 1)),
@@ -139,7 +249,8 @@ def predict():
 
     # Simpan kalau user klik save
     if form.get("save") == "yes":
-        db.session.add(StrokeInput(
+        record = StrokeInput(
+            name=data_input["name"],
             age=data_input["age"],
             gender=data_input["gender"],
             hypertension=int(form.get("hypertension", 0)),
@@ -148,8 +259,10 @@ def predict():
             bmi=bmi,
             smoking=data_input["smoking"],
             prediction=float(prob)
-        ))
+        )
+        db.session.add(record)
         db.session.commit()
+
 
     return render_template(
         "result.html",
@@ -162,6 +275,17 @@ def predict():
     )
 
 
+# =================================
+#         ALGORITMA REKURSIF
+# =================================
+
+# ============
+#   SORTING (fungsinya ada di file utils.py)
+# ============
+
+from utils import merge_sort
+
+
 # ===========================
 #     RUN SERVER
 # ===========================
@@ -170,5 +294,8 @@ if __name__ == "__main__":
         db.create_all()
         print("Database siap → stroke.db dibuat")
     app.run(debug=True)
+
+
+
 
 

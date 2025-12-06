@@ -24,12 +24,25 @@
                 Prototype model · Not a diagnostic tool
             </div>
         </div>
+        <div style="position:absolute; top:20px; right:20px;">
+            <a href="/admin">Admin</a>
+        </div>
+        {% if session.get("admin") %}
+        <a href="/admin/logout" 
+            style="position: absolute; top: 20px; right: 20px; 
+                    color: #fff; font-weight:600; text-decoration:none;">
+            Logout
+            </a>
+        {% endif %}
+
+
+
     </header>
 
     <main class="main-wrapper">
         {% block content %}{% endblock %}
     </main>
-
+    
     <footer class="disclaimer">
         This application provides an estimated risk score based on the entered data and is not intended to be used as a
         substitute for medical diagnosis, clinical judgment, or treatment decisions.
