@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="admin-title">Admin Dashboard</h2>
+<div class="admin-topbar">
+    <a href="/admin/logout" class="logout-btn">Logout</a>
+</div>
+
+<div class="sort-bar">
+    <span>Sort:</span>
+    <a href="?sort=prediction&order=desc">Risk ↓</a>
+    <a href="?sort=prediction&order=asc">Risk ↑</a>
+    <a href="?sort=age&order=desc">Age ↓</a>
+    <a href="?sort=age&order=asc">Age ↑</a>
+</div>
+
+
+<div class="admin-table-wrapper">
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>BMI</th>
+            <th>Risk</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for r in data %}
+        <tr onclick="window.location='/admin/view/{{ r.id }}'">
+            <td>{{ r.id }}</td>
+            <td>{{ r.name }}</td>
+            <td>{{ r.age }}</td>
+            <td>{{ r.bmi | round(1) }}</td>
+            <td class="risk-cell">{{ (r.prediction * 100) | round(1) }}%</td>
+            <td>
+                <a href="/admin/delete/{{ r.id }}" 
+                   class="delete-btn" 
+                   onclick="event.stopPropagation(); return confirm('Delete this record?');">
+                   Delete
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<style>
+/* MAIN TITLE */
+.admin-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+/* SORT BAR */
+.sort-bar {
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.sort-bar a {
+    margin-left: 10px;
+    color: #4aa8ff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.sort-bar a:hover {
+    text-decoration: underline;
+}
+
+/* TABLE WRAPPER */
+.admin-table-wrapper {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-top: 10px;
+    backdrop-filter: blur(6px);
+}
+
+/* TABLE STYLE */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.admin-table thead {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.admin-table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #ffffffcc;
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(10px);
+}
+
+.admin-table td {
+    padding: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: #e8e8e8;
+}
+
+/* ROW INTERACTIVITY */
+.admin-table tbody tr {
+    transition: 0.15s ease;
+}
+
+.admin-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.13);
+    cursor: pointer;
+    transform: scale(1.01);
+}
+
+/* RISK COLORING */
+.risk-cell {
+    font-weight: 600;
+}
+
+.risk-cell::after {
+    content: "";
+}
+
+/* DELETE BUTTON */
+.delete-btn {
+    color: #ff4a4a;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.delete-btn:hover {
+    text-decoration: underline;
+}
+
+/* MOBILE FRIENDLY */
+@media (max-width: 768px) {
+    .admin-table th, .admin-table td {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+}
+.admin-topbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.logout-btn {
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.15s;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+</style>
+
+{% endblock %}

@@ -8,7 +8,7 @@
 <!-- ============================================ -->
 <!-- FORM PREDIKSI STROKE                        -->
 <!-- ============================================ -->
-<form method="POST" action="{{ url_for('result') }}">
+<form method="POST" action="{{ url_for('predict') }}">
     
     <!-- ============================================ -->
     <!-- SECTION 1: INFORMASI PASIEN                 -->
@@ -22,6 +22,12 @@
         </div>
         
         <!-- ROW 1: Age & Gender -->
+         <div class="section-row">
+            <div class="field-block full">
+                <label>Full Name</label>
+                <input type="text" name="name" value="John Doe" required>
+            </div>
+        </div>
         <div class="section-row">
             <div class="field-block">
                 <label>Age</label>
@@ -56,6 +62,26 @@
                 <input type="number" name="glucose" value="110" step="0.1" required>
             </div>
         </div>
+
+        <!-- NEW ROW: Hypertension & Heart Disease -->
+        <div class="section-row">
+            <div class="field-block">
+                <label>Hypertension</label>
+                <select name="hypertension">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="field-block">
+                <label>Heart Disease</label>
+                <select name="heart_disease">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+        </div>
+
     </section>
 
     <!-- ============================================ -->
@@ -118,7 +144,15 @@
         <div class="action-text">
             The risk score is calculated from the information above using a calibrated logistic regression model.
         </div>
-        <button type="submit" class="btn-primary-wide">Calculate risk</button>
+
+        <!-- Dua tombol: Hitung & Simpan / Hitung Saja -->
+        <button type="submit" class="btn-primary-wide" name="save" value="yes">
+            Calculate & Save
+        </button>
+
+        <button type="submit" class="btn-secondary-wide" name="save" value="no">
+            Calculate Only
+        </button>
     </div>
     
 </form>
