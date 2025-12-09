@@ -4,9 +4,10 @@
 
 <form action="/predict" method="POST">
 
+<input type="hidden" name="save" value="yes">
+
 <div class="page-container">
 
-    <!-- =================== PATIENT INFORMATION =================== -->
     <div class="section-block">
         <div class="section-title">Patient information</div>
         <div class="section-subtitle">Basic demographic & physiological measurements.</div>
@@ -50,23 +51,23 @@
             <div class="form-card">
                 <label class="form-label">Hypertension</label>
                 <select class="form-input" name="hypertension">
-                    <option>No</option>
-                    <option>Yes</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
                 </select>
             </div>
 
             <div class="form-card">
                 <label class="form-label">Heart Disease</label>
                 <select class="form-input" name="heart_disease">
-                    <option>No</option>
-                    <option>Yes</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
                 </select>
             </div>
 
         </div>
     </div>
 
-    <!-- =================== LIFESTYLE & PROFILE =================== -->
+    <!-- Lifestyle & Profile -->
     <div class="section-block">
         <div class="section-title">Lifestyle & profile</div>
         <div class="section-subtitle">Social & demographic characteristics.</div>
@@ -112,11 +113,9 @@
         </div>
     </div>
 
-    <!-- =================== SUBMIT BUTTON =================== -->
     <button class="submit-btn">Calculate Risk</button>
 
 </div>
-
 </form>
 
 
