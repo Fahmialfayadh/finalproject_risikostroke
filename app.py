@@ -106,6 +106,8 @@ def admin_view(id):
         "ever_married": r.ever_married,
         "work_type": r.work_type,
         "residence": r.residence,
+        "hypertension": r.hypertension,
+        "heart_disease": r.heart_disease,
     }
 
     response = make_response(render_template(
@@ -147,16 +149,18 @@ def admin_logout():
 #  MODEL PARAMS (LOGISTIC WOE)
 # ===========================
 coef = {
-    "age": 0.977266,
-    "glucose": 0.446222,
-    "bmi": 0.677713,
-    "residence": 0.420405,
-    "smoking": 0.350521,
-    "ever_married": -0.048892,
-    "work_type": -0.184483,
-    "gender": -1.221075,
+    "age": 0.932249,
+    "glucose": 0.359952,
+    "bmi":  0.678346,
+    "residence": 0.447152,
+    "smoking": 0.287368,
+    "ever_married": 0.008489,
+    "work_type": -0.213577,
+    "gender": 1.356776,
+    "hypertension": 0.546766,
+    "heart_disease": 0.446268,
 }
-intercept = -0.053809001723937384
+intercept = -0.18901998817349125    
 
 # ===========================
 #       WOE TABLES
@@ -220,6 +224,8 @@ def calc(data):
         "work_type": woe_work[data["work_type"]],
         "residence": woe_resid[data["residence"]],
         "smoking": woe_smk[data["smoking"]],
+        "hypertension": 1.0953638583036969 if data["hypertension"] == 1 else -0.21608308534363982,
+        "heart_disease": 1.392570918553818 if data["heart_disease"] == 1 else -0.1623678345990987,
     }
 
     z = intercept
