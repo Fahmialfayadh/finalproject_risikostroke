@@ -8,10 +8,12 @@
 
 <div class="sort-bar">
     <span>Sort:</span>
-    <a href="?sort=prediction&order=desc">Risk ↓</a>
-    <a href="?sort=prediction&order=asc">Risk ↑</a>
-    <a href="?sort=age&order=desc">Age ↓</a>
-    <a href="?sort=age&order=asc">Age ↑</a>
+
+    <a href="?sort=prediction&order=desc&q={{ request.args.get('q', '') }}">Risk ↓</a>
+    <a href="?sort=prediction&order=asc&q={{ request.args.get('q', '') }}">Risk ↑</a>
+
+    <a href="?sort=age&order=desc&q={{ request.args.get('q', '') }}">Age ↓</a>
+    <a href="?sort=age&order=asc&q={{ request.args.get('q', '') }}">Age ↑</a>
 </div>
 
 
@@ -49,6 +51,13 @@
 </table>
 </div>
 
+
+<div class ='search-bar'>
+    <form method="GET" action="/admin">
+        <input type="text" name="q" placeholder="Search by name" value="{{ request.args.get('q', '') }}">
+        <button type="submit">Search</button>
+    </form>
+</div>
 <style>
 /* MAIN TITLE */
 .admin-title {
@@ -167,6 +176,12 @@
 
 .logout-btn:hover {
     background: rgba(255, 255, 255, 0.25);
+}
+
+.search-bar {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
 }
 </style>
 

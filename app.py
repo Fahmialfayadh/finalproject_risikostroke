@@ -3,6 +3,7 @@ from flask import Flask, redirect, render_template, request, session
 from models import db, StrokeInput
 from flask import make_response
 import json
+from utils import search, merge_sort 
 
 
 
@@ -35,15 +36,24 @@ def admin():
     if not session.get("admin"):
         return redirect("/admin/login")
 
-    # ambil data
+    # ambil parameter search
+    q = request.args.get("q", "").strip()
+
+    # ambil semua data
+    records = StrokeInput.query.all()
+
+    # FILTER
+    if q:
+        records = search(records, q, ["name"])
+
+    # SORT
     sort_key = request.args.get("sort", "prediction")
     order = request.args.get("order", "desc")
     reverse = (order == "desc")
 
-    records = StrokeInput.query.all()
     sorted_records = merge_sort(records, sort_key, reverse)
 
-    # render template
+    # kirim ke template
     response = make_response(render_template(
         "admin_panel.html",
         data=sorted_records,
@@ -51,12 +61,12 @@ def admin():
         order=order
     ))
 
-    # blok browser cache
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "0"
 
     return response
+
 
 # ===========================
 #   VIEW DETAIL RECORD

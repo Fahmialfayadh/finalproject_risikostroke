@@ -37,3 +37,18 @@ def merge(left, right, key, reverse):
     result.extend(right[j:])
     return result
 # ===========================
+
+def search(records, query, fields):
+    query = query.lower()
+    filtered = []
+
+    for record in records:
+        for field in fields:
+            value = getattr(record, field, "") or ""
+            value = str(value).lower()
+
+            if query in value:
+                filtered.append(record)
+                break  # ini benar (keluar dari loop field)
+    
+    return filtered
