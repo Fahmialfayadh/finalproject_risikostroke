@@ -1,160 +1,268 @@
-<!-- ============================================ -->
-<!-- EXTENDS BASE TEMPLATE                       -->
-<!-- ============================================ -->
 {% extends "base.html" %}
 
 {% block content %}
 
-<!-- ============================================ -->
-<!-- FORM PREDIKSI STROKE                        -->
-<!-- ============================================ -->
-<form method="POST" action="{{ url_for('predict') }}">
-    
-    <!-- ============================================ -->
-    <!-- SECTION 1: INFORMASI PASIEN                 -->
-    <!-- ============================================ -->
-    <section class="section-card">
-        <div class="section-header">
-            <h2 class="section-title">Patient information</h2>
-            <p class="section-subtitle">
-                Basic demographic and physiological measurements.
-            </p>
-        </div>
-        
-        <!-- ROW 1: Age & Gender -->
-         <div class="section-row">
-            <div class="field-block full">
-                <label>Full Name</label>
-                <input type="text" name="name" value="John Doe" required>
+<form action="/predict" method="POST">
+
+<div class="page-container">
+
+    <!-- =================== PATIENT INFORMATION =================== -->
+    <div class="section-block">
+        <div class="section-title">Patient information</div>
+        <div class="section-subtitle">Basic demographic & physiological measurements.</div>
+
+        <div class="form-grid">
+
+            <div class="form-card">
+                <label class="form-label">Full Name</label>
+                <input class="form-input" name="name">
             </div>
-        </div>
-        <div class="section-row">
-            <div class="field-block">
-                <label>Age</label>
-                <input type="number" name="age" value="25" min="1" max="120" required>
-            </div>
-            <div class="field-block">
-                <label>Gender</label>
-                <select name="gender">
+
+            <div class="form-card">
+                <label class="form-label">Gender</label>
+                <select class="form-input" name="gender">
                     <option>Male</option>
                     <option>Female</option>
                     <option>Other</option>
                 </select>
             </div>
-        </div>
-        
-        <!-- ROW 2: Weight & Height -->
-        <div class="section-row">
-            <div class="field-block">
-                <label>Weight (kg)</label>
-                <input type="number" name="weight" value="70" step="0.1" required>
-            </div>
-            <div class="field-block">
-                <label>Height (cm)</label>
-                <input type="number" name="height" value="170" step="0.1" required>
-            </div>
-        </div>
-        
-        <!-- ROW 3: Glucose Level -->
-        <div class="section-row">
-            <div class="field-block full">
-                <label>Average glucose (mg/dL)</label>
-                <input type="number" name="glucose" value="110" step="0.1" required>
-            </div>
-        </div>
 
-        <!-- NEW ROW: Hypertension & Heart Disease -->
-        <div class="section-row">
-            <div class="field-block">
-                <label>Hypertension</label>
-                <select name="hypertension">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
+            <div class="form-card">
+                <label class="form-label">Age</label>
+                <input class="form-input" type="number" name="age">
             </div>
 
-            <div class="field-block">
-                <label>Heart Disease</label>
-                <select name="heart_disease">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
+            <div class="form-card">
+                <label class="form-label">Height (cm)</label>
+                <input class="form-input" type="number" name="height">
             </div>
-        </div>
 
-    </section>
+            <div class="form-card">
+                <label class="form-label">Weight (kg)</label>
+                <input class="form-input" type="number" name="weight">
+            </div>
 
-    <!-- ============================================ -->
-    <!-- SECTION 2: GAYA HIDUP & PROFIL              -->
-    <!-- ============================================ -->
-    <section class="section-card">
-        <div class="section-header">
-            <h2 class="section-title">Lifestyle & profile</h2>
-            <p class="section-subtitle">
-                Socio-demographic and exposure-related characteristics.
-            </p>
-        </div>
-        
-        <!-- ROW 1: Marriage & Residence -->
-        <div class="section-row">
-            <div class="field-block">
-                <label>Ever married</label>
-                <select name="ever_married">
-                    <option>Yes</option>
+            <div class="form-card">
+                <label class="form-label">Average glucose (mg/dL)</label>
+                <input class="form-input" type="number" name="glucose">
+            </div>
+
+            <div class="form-card">
+                <label class="form-label">Hypertension</label>
+                <select class="form-input" name="hypertension">
                     <option>No</option>
+                    <option>Yes</option>
                 </select>
             </div>
-            <div class="field-block">
-                <label>Residence</label>
-                <select name="residence">
+
+            <div class="form-card">
+                <label class="form-label">Heart Disease</label>
+                <select class="form-input" name="heart_disease">
+                    <option>0</option>
+                    <option>1</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- =================== LIFESTYLE & PROFILE =================== -->
+    <div class="section-block">
+        <div class="section-title">Lifestyle & profile</div>
+        <div class="section-subtitle">Social & demographic characteristics.</div>
+
+        <div class="form-grid">
+
+            <div class="form-card">
+                <label class="form-label">Ever married</label>
+                <select class="form-input" name="ever_married">
+                    <option>No</option>
+                    <option>Yes</option>
+                </select>
+            </div>
+
+            <div class="form-card">
+                <label class="form-label">Residence</label>
+                <select class="form-input" name="residence">
                     <option>Urban</option>
                     <option>Rural</option>
                 </select>
             </div>
-        </div>
-        
-        <!-- ROW 2: Work Type & Smoking -->
-        <div class="section-row">
-            <div class="field-block">
-                <label>Work type</label>
-                <select name="work_type">
+
+            <div class="form-card">
+                <label class="form-label">Work type</label>
+                <select class="form-input" name="work_type">
                     <option>Private</option>
                     <option>Self-employed</option>
                     <option>Govt_job</option>
                     <option>children</option>
-                    <option>Never_worked</option>
                 </select>
             </div>
-            <div class="field-block">
-                <label>Smoking status</label>
-                <select name="smoking">
+
+            <div class="form-card">
+                <label class="form-label">Smoking status</label>
+                <select class="form-input" name="smoking">
                     <option>never smoked</option>
                     <option>formerly smoked</option>
                     <option>smokes</option>
                     <option>Unknown</option>
                 </select>
             </div>
+
         </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- TOMBOL SUBMIT                               -->
-    <!-- ============================================ -->
-    <div class="action-area">
-        <div class="action-text">
-            The risk score is calculated from the information above using a calibrated logistic regression model.
-        </div>
-
-        <!-- Dua tombol: Hitung & Simpan / Hitung Saja -->
-        <button type="submit" class="btn-primary-wide" name="save" value="yes">
-            Calculate & Save
-        </button>
-
-        <button type="submit" class="btn-secondary-wide" name="save" value="no">
-            Calculate Only
-        </button>
     </div>
-    
+
+    <!-- =================== SUBMIT BUTTON =================== -->
+    <button class="submit-btn">Calculate Risk</button>
+
+</div>
+
 </form>
+
+
+<style>
+    /* ============================================================
+   CLEAN MODERN HEALTH UI (LAYOUT FIRST)
+   ============================================================ */
+
+/* ---------- RESET ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: #f5f7fb;
+    padding: 40px 0 120px;
+    color: #1c1c1c;
+}
+
+/* ---------- PAGE CONTAINER ---------- */
+.page-container {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* ---------- TITLES ---------- */
+.section-title {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    color: #222;
+}
+
+.section-subtitle {
+    font-size: 14px;
+    color: #6a6a6a;
+    margin-bottom: 26px;
+}
+
+/* ---------- FORM GRID LAYOUT ---------- */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+    margin-bottom: 40px;
+}
+
+@media (min-width: 900px) {
+    .form-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- FORM CARD ---------- */
+.form-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px 18px 20px;
+    border: 1px solid #e5e5e5;
+
+    display: flex;
+    flex-direction: column;
+
+    transition: box-shadow 0.25s ease, transform 0.2s ease;
+}
+
+.form-card:hover {
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    transform: translateY(-3px);
+}
+
+/* ---------- LABEL ---------- */
+.form-label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+/* ---------- INPUTS ---------- */
+.form-input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d4d4d4;
+    background: #fafafa;
+    color: #222;
+    font-size: 15px;
+
+    transition: border 0.2s ease, background 0.2s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #7da6ff;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(125, 166, 255, 0.2);
+}
+
+/* ---------- BUTTON ---------- */
+.submit-btn {
+    margin: 30px auto 0;
+    display: block;
+    width: 220px;
+    text-align: center;
+
+    padding: 14px 0;
+    font-size: 16px;
+    font-weight: 700;
+
+    border-radius: 12px;
+    background: #4f7cff;
+    color: white;
+    border: none;
+
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(79, 124, 255, 0.35);
+}
+
+/* ---------- SPACING BETWEEN SECTIONS ---------- */
+.section-block {
+    margin-top: 40px;
+}
+
+/* ---------- SMALLER RESPONSIVE ---------- */
+@media (max-width: 768px) {
+    .submit-btn {
+        width: 100%;
+    }
+}
+</style>
 
 {% endblock %}

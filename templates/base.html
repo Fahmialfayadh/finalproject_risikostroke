@@ -9,43 +9,47 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body style="background:#f5f7fb;">
 
-    <header class="page-hero">
-        <div class="hero-inner">
+    <!-- ====== HEADER ====== -->
+    <header class="page-hero" style="background:#f5f7fb; box-shadow:none; padding-bottom:10px;">
+        <div class="hero-inner" style="max-width:1080px; margin:0 auto; padding:0 24px;">
             <div>
-                <h1 class="hero-title">Stroke Risk Calculator</h1>
-                <p class="hero-subtitle">
-                    Web-based risk estimation using logistic regression and Weight of Evidence. 
-                    Designed for exploratory assessment of individual stroke risk profiles.
+                <h1 class="hero-title" style="color:#222; margin-bottom:6px;">Stroke Risk Calculator</h1>
+                <p class="hero-subtitle" style="color:#555;">
+                    Web-based risk estimation using logistic regression and Weight of Evidence.
                 </p>
             </div>
-            <div class="hero-tag">
+
+            <div class="hero-tag" style="color:#555; border-color:#ccc;">
                 Prototype model · Not a diagnostic tool
             </div>
         </div>
-        <div style="position:absolute; top:20px; right:20px;">
-            <a href="/admin">Admin</a>
+        <!--    home nav-->
+        <div style="position:absolute; top:20px; left: 24px;"> 
+            <a href="/" style="color:#333; font-weight:600; margin-right:16px;">Home</a>
         </div>
-        {% if session.get("admin") %}
-        <a href="/admin/logout" 
-            style="position: absolute; top: 20px; right: 20px; 
-                    color: #fff; font-weight:600; text-decoration:none;">
-            Logout
-            </a>
-        {% endif %}
 
-
+        <!-- Admin Links -->
+        <div style="position:absolute; top:20px; right:24px;">
+            {% if session.get("admin") %}
+                <a href="/admin" style="color:#333; font-weight:600;">Admin Panel</a> |
+                <a href="/admin/logout" style="color:#333; font-weight:600;">Logout</a>
+            {% else %}
+                <a href="/admin" style="color:#333; font-weight:600;">Admin</a>
+            {% endif %}
+        </div>
 
     </header>
 
-    <main class="main-wrapper">
+    <!-- ====== MAIN WRAPPER (NO UNWANTED STYLES) ====== -->
+    <main>
         {% block content %}{% endblock %}
     </main>
-    
-    <footer class="disclaimer">
-        This application provides an estimated risk score based on the entered data and is not intended to be used as a
-        substitute for medical diagnosis, clinical judgment, or treatment decisions.
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="disclaimer" style="color:#666; text-align:center; padding:40px 0;">
+        This application provides an estimated risk score based on the entered data.
     </footer>
 
 </body>

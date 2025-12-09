@@ -58,11 +58,30 @@
         <button type="submit">Search</button>
     </form>
 </div>
+
 <style>
-/* MAIN TITLE */
+:root {
+    --bg: #ffffff;
+    --panel: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --accent: #2563eb;
+    --danger: #dc2626;
+    --header-bg: #f1f5f9;
+    --border: #e2e8f0;
+}
+
+/* MAIN */
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, system-ui, sans-serif;
+}
+
 .admin-title {
     font-size: 2.2rem;
     font-weight: 700;
+    color: var(--text);
     margin-bottom: 15px;
 }
 
@@ -70,11 +89,12 @@
 .sort-bar {
     margin-bottom: 15px;
     font-size: 1rem;
+    color: var(--muted);
 }
 
 .sort-bar a {
     margin-left: 10px;
-    color: #4aa8ff;
+    color: var(--accent);
     text-decoration: none;
     font-weight: 500;
 }
@@ -83,81 +103,7 @@
     text-decoration: underline;
 }
 
-/* TABLE WRAPPER */
-.admin-table-wrapper {
-    width: 100%;
-    overflow: hidden;
-    border-radius: 10px;
-    margin-top: 10px;
-    backdrop-filter: blur(6px);
-}
-
-/* TABLE STYLE */
-.admin-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 1rem;
-    background: rgba(255, 255, 255, 0.06);
-}
-
-.admin-table thead {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.admin-table th {
-    padding: 12px;
-    text-align: left;
-    font-weight: 600;
-    color: #ffffffcc;
-    position: sticky;
-    top: 0;
-    backdrop-filter: blur(10px);
-}
-
-.admin-table td {
-    padding: 12px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    color: #e8e8e8;
-}
-
-/* ROW INTERACTIVITY */
-.admin-table tbody tr {
-    transition: 0.15s ease;
-}
-
-.admin-table tbody tr:hover {
-    background: rgba(255, 255, 255, 0.13);
-    cursor: pointer;
-    transform: scale(1.01);
-}
-
-/* RISK COLORING */
-.risk-cell {
-    font-weight: 600;
-}
-
-.risk-cell::after {
-    content: "";
-}
-
-/* DELETE BUTTON */
-.delete-btn {
-    color: #ff4a4a;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.delete-btn:hover {
-    text-decoration: underline;
-}
-
-/* MOBILE FRIENDLY */
-@media (max-width: 768px) {
-    .admin-table th, .admin-table td {
-        padding: 8px;
-        font-size: 0.9rem;
-    }
-}
+/* TOP BAR */
 .admin-topbar {
     display: flex;
     justify-content: flex-end;
@@ -166,23 +112,119 @@
 
 .logout-btn {
     padding: 6px 14px;
-    background: rgba(255, 255, 255, 0.15);
+    background: #e2e8f0;
     border-radius: 6px;
-    color: #fff;
+    color: var(--text);
     font-weight: 600;
     text-decoration: none;
     transition: 0.15s;
 }
 
 .logout-btn:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: #cbd5e1;
 }
 
+/* TABLE WRAPPER */
+.admin-table-wrapper {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-top: 10px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+}
+
+/* TABLE */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    background: var(--panel);
+}
+
+.admin-table thead {
+    background: var(--header-bg);
+}
+
+.admin-table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-table td {
+    padding: 12px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+}
+
+.admin-table tbody tr {
+    transition: 0.15s ease;
+}
+
+.admin-table tbody tr:hover {
+    background: #f8fafc;
+    cursor: pointer;
+}
+
+/* RISK CELL */
+.risk-cell {
+    font-weight: 600;
+    color: var(--accent);
+}
+
+/* DELETE BUTTON */
+.delete-btn {
+    color: var(--danger);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.delete-btn:hover {
+    text-decoration: underline;
+}
+
+/* SEARCH BAR */
 .search-bar {
     margin-top: 15px;
     display: flex;
     justify-content: flex-end;
 }
+
+.search-bar input {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: var(--text);
+}
+
+.search-bar button {
+    margin-left: 8px;
+    padding: 6px 14px;
+    background: var(--accent);
+    border: none;
+    color: white;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.search-bar button:hover {
+    background: #1d4ed8;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .admin-table th, .admin-table td {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+}
 </style>
+
 
 {% endblock %}
