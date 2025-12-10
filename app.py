@@ -3,7 +3,10 @@ from flask import Flask, redirect, render_template, request, session
 from models import db, StrokeInput
 from flask import make_response
 import json
-from utils import search, merge_sort 
+from utils import search, merge_sort
+from pdf_generator import generate_pdf_report
+from flask import send_file
+import io 
 
 
 
@@ -69,13 +72,59 @@ def admin():
 
 
 # ===========================
+#   PDF GENERATION
+# ===========================
+# ===========================
+#   PDF GENERATION
+# ===========================
+@app.route("/download_pdf", methods=["POST"])
+def download_pdf():
+    # Recalculate using POST data to be safe and consistent
+    form = request.form
+    data_input = {
+        "name": form.get("name", ""),
+        "age": float(form.get("age", 0)),
+        "weight": float(form.get("weight", 0)),
+        "height": float(form.get("height", 1)),
+        "glucose": float(form.get("glucose", 0)),
+        "gender": form.get("gender", "Other"),
+        "ever_married": form.get("ever_married", "No"),
+        "work_type": form.get("work_type", "Private"),
+        "residence": form.get("residence", "Urban"),
+        "smoking": form.get("smoking", "Unknown"),
+        "hypertension": int(form.get("hypertension", 0)),
+        "heart_disease": int(form.get("heart_disease", 0)),
+    }
+    
+    prob, level, bmi, bins, contrib = calc(data_input)
+    
+    # Bundle result data
+    result = {
+        "prob": prob,
+        "level": level,
+        "bmi": bmi,
+        "bins": bins,
+        "contrib": contrib
+    }
+    
+    # Generate PDF using new module
+    pdf_buffer = generate_pdf_report(data_input, result)
+    
+    response = make_response(pdf_buffer.getvalue())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=Stroke_Risk_Report_{data_input["name"]}.pdf'
+    
+    return response
+
+
+# ===========================
 #   VIEW DETAIL RECORD
 
 def calculate_level(prob):
-    if prob < 0.03:
+    if prob < 0.08:
         return "Low"
-    elif prob < 0.08:
-        return "Medium"
+    elif prob < 0.20:
+        return "Moderate"
     else:
         return "High"
 

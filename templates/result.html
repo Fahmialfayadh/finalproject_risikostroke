@@ -5,205 +5,180 @@
 
 {% block content %}
 
-<!-- ============================================ -->
-<!-- SECTION: RINGKASAN HASIL RISIKO             -->
-<!-- ============================================ -->
-<section class="result-card">
-    <div class="section-header">
-        <h2 class="section-title">Risk summary</h2>
-        <p class="section-subtitle">
-            Estimated probability of stroke given the submitted profile.
-        </p>
-    </div>
-    <div class="section-divider">
-        <div class="name-block">
-            <span class="name-value">{{ data["name"] }}</span>
+<div class="page-container">
+
+    <!-- ============================================ -->
+    <!-- SECTION: RINGKASAN HASIL RISIKO             -->
+    <!-- ============================================ -->
+    <section class="result-card">
+        <div class="section-header" style="text-align: center; margin-bottom: 2rem;">
+            <h2 class="section-title" style="justify-content: center;">Risk Summary</h2>
+            <p class="section-subtitle">
+                Estimated probability of stroke given the submitted profile.
+            </p>
         </div>
 
-    </div>
-    <!-- ============================================ -->
-    <!-- HASIL UTAMA: Persentase & Level Risiko      -->
-    <!-- ============================================ -->
-    <div class="result-main">
-        <!-- Tampilkan probabilitas dalam persen (dibulatkan 1 desimal) -->
-        <div class="result-number">{{ (prob * 100) | round(1) }}%</div>
-        
-        <div class="result-label">Estimated stroke risk</div>
-        
-        <!-- Level risiko (Low/Medium/High) dengan class dinamis -->
-        <div class="result-level level-{{ level | lower }}">
-            {{ level }} risk category
+        <div class="name-block" style="margin-bottom: 1.5rem;">
+            <span style="font-size: 1.5rem; font-weight: 700; color: var(--text-main);">{{ data["name"] }}</span>
         </div>
-        
-        <!-- Gauge bar visual untuk menampilkan risiko -->
-        <div class="gauge">
-            <div class="gauge-fill" style="width: {{ (prob * 100) }}%;"></div>
+
+        <!-- ============================================ -->
+        <!-- HASIL UTAMA: Persentase & Level Risiko      -->
+        <!-- ============================================ -->
+        <div class="result-main">
+            <!-- Tampilkan probabilitas dalam persen (dibulatkan 1 desimal) -->
+            <div class="result-number">{{ (prob * 100) | round(1) }}%</div>
+
+            <div class="result-label">Estimated stroke risk</div>
+
+            <!-- Level risiko (Level dinamis) -->
+            <div class="result-level level-{{ level | lower }}">
+                {{ level }} risk category
+            </div>
+
+            <!-- Gauge bar visual -->
+            <div class="gauge">
+                <div class="gauge-fill" style="width: {{ (prob * 100) }}%;"></div>
+            </div>
+
+            <!-- Catatan penting -->
+            <div class="result-note">
+                This value reflects the model's predicted probability based on your inputs. It does not represent an
+                absolute
+                risk and should always be interpreted in context of clinical evaluation.
+            </div>
         </div>
-        
-        <!-- Catatan penting tentang interpretasi hasil -->
-        <div class="result-note">
-            This value reflects the model's predicted probability based on your inputs. It does not represent an absolute
-            risk and should always be interpreted in context of clinical evaluation.
+
+        <!-- ============================================ -->
+        <!-- DETAIL GRID: BMI & Kategori                 -->
+        <!-- ============================================ -->
+        <div class="detail-grid">
+            <div><span class="detail-label">BMI</span> <span class="detail-value">{{ bmi | round(1) }}</span></div>
+            <div><span class="detail-label">Age category</span> <span class="detail-value">{{ bins[0] }}</span></div>
+            <div><span class="detail-label">Glucose category</span> <span class="detail-value">{{ bins[1] }}</span>
+            </div>
+            <div><span class="detail-label">BMI category</span> <span class="detail-value">{{ bins[2] }}</span></div>
         </div>
-    </div>
-    
+
+        <!-- PDF DOWNLOAD FORM -->
+        <div style="margin-top: 30px;">
+            <form action="/download_pdf" method="POST" target="_blank">
+                {% for key, value in data.items() %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+                {% endfor %}
+                <button type="submit" class="submit-btn" style="background: var(--text-main); margin-top: 0;">
+                    Download Result PDF
+                </button>
+            </form>
+        </div>
+    </section>
+
     <!-- ============================================ -->
-    <!-- DETAIL GRID: BMI & Kategori                 -->
+    <!-- SECTION: INPUT DETAILS (DATA USER LENGKAP)  -->
     <!-- ============================================ -->
-    <div class="detail-grid">
-        <div><span class="detail-label">BMI</span> <span class="detail-value">{{ bmi | round(1) }}</span></div>
-        <div><span class="detail-label">Age category</span> <span class="detail-value">{{ bins[0] }}</span></div>
-        <div><span class="detail-label">Glucose category</span> <span class="detail-value">{{ bins[1] }}</span></div>
-        <div><span class="detail-label">BMI category</span> <span class="detail-value">{{ bins[2] }}</span></div>
-    </div>
-</section>
+    <section class="detail-card">
+        <div class="detail-header">
+            <h3 class="detail-title">Input Details</h3>
+            <p class="detail-subtitle">
+                Full profile information used for risk calculation.
+            </p>
+        </div>
 
-<!-- ============================================ -->
-<!-- SECTION: INPUT DETAILS (DATA USER LENGKAP)  -->
-<!-- ============================================ -->
-<section class="detail-card">
-    <div class="detail-header">
-        <h3 class="detail-title">Input details</h3>
-        <p class="detail-subtitle">
-            Full profile information used for risk calculation.
-        </p>
-    </div>
+        <table class="detail-table">
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td>{{ data["name"] }}</td>
+                </tr>
+                <tr>
+                    <td>Age</td>
+                    <td>{{ data["age"] }}</td>
+                </tr>
+                <tr>
+                    <td>Gender</td>
+                    <td>{{ data["gender"] }}</td>
+                </tr>
+                <tr>
+                    <td>Weight</td>
+                    <td>{{ data["weight"] }} kg</td>
+                </tr>
+                <tr>
+                    <td>Height</td>
+                    <td>{{ data["height"] }} cm</td>
+                </tr>
+                <tr>
+                    <td>BMI</td>
+                    <td>{{ bmi | round(1) }}</td>
+                </tr>
+                <tr>
+                    <td>Average Glucose</td>
+                    <td>{{ data["glucose"] }}</td>
+                </tr>
+                <tr>
+                    <td>Hypertension</td>
+                    <td>{{ "Yes" if data["hypertension"] == 1 else "No" }}</td>
+                </tr>
+                <tr>
+                    <td>Heart Disease</td>
+                    <td>{{ "Yes" if data["heart_disease"] == 1 else "No" }}</td>
+                </tr>
+                <tr>
+                    <td>Ever Married</td>
+                    <td>{{ data["ever_married"] }}</td>
+                </tr>
+                <tr>
+                    <td>Work Type</td>
+                    <td>{{ data["work_type"] }}</td>
+                </tr>
+                <tr>
+                    <td>Residence Type</td>
+                    <td>{{ data["residence"] }}</td>
+                </tr>
+                <tr>
+                    <td>Smoking Status</td>
+                    <td>{{ data["smoking"] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 
-    <table class="detail-table">
-        <thead>
-            <tr>
-                <th>Field</th>
-                <th>Value</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>Name</td><td>{{ data["name"] }}</td></tr>
-            <tr><td>Age</td><td>{{ data["age"] }}</td></tr>
-            <tr><td>Gender</td><td>{{ data["gender"] }}</td></tr>
-            <tr><td>Weight</td><td>{{ data["weight"] }} kg</td></tr>
-            <tr><td>Height</td><td>{{ data["height"] }} cm</td></tr>
-            <tr><td>BMI</td><td>{{ bmi | round(1) }}</td></tr>
-            <tr><td>Average Glucose</td><td>{{ data["glucose"] }}</td></tr>
-            <tr><td>Hypertension</td>
-                <td>{{ "Yes" if data["hypertension"] == 1 else "No" }}</td>
-            </tr>
-            <tr><td>Heart Disease</td>
-                <td>{{ "Yes" if data["heart_disease"] == 1 else "No" }}</td>
-            </tr>
-            <tr><td>Ever Married</td><td>{{ data["ever_married"] }}</td></tr>
-            <tr><td>Work Type</td><td>{{ data["work_type"] }}</td></tr>
-            <tr><td>Residence Type</td><td>{{ data["residence"] }}</td></tr>
-            <tr><td>Smoking Status</td><td>{{ data["smoking"] }}</td></tr>
-        </tbody>
-    </table>
-</section>
+    <!-- ============================================ -->
+    <!-- SECTION: KONTRIBUSI FITUR MODEL             -->
+    <!-- ============================================ -->
+    <section class="detail-card">
+        <div class="detail-header">
+            <h3 class="detail-title">Model Feature Contributions</h3>
+            <p class="detail-subtitle">
+                Linear contributions of each feature (coefficient × WOE) to the logit score.
+            </p>
+        </div>
 
-<!-- ============================================ -->
-<!-- SECTION: KONTRIBUSI FITUR MODEL             -->
-<!-- ============================================ -->
-<section class="detail-card">
-    <div class="detail-header">
-        <h3 class="detail-title">Model feature contributions</h3>
-        <p class="detail-subtitle">
-            Linear contributions of each feature (coefficient × WOE) to the logit score.
-        </p>
-    </div>
-    
-    <!-- Tabel kontribusi setiap fitur -->
-    <table class="detail-table">
-        <thead>
-            <tr>
-                <th>Feature</th>
-                <th>Contribution</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Loop semua fitur dan kontribusinya -->
-            {% for k, v in contrib.items() %}
-            <tr>
-                <td>{{ k }}</td>
-                <td>{{ v | round(4) }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</section>
+        <!-- Tabel kontribusi setiap fitur -->
+        <table class="detail-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Contribution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop semua fitur dan kontribusinya -->
+                {% for k, v in contrib.items() %}
+                <tr>
+                    <td>{{ k }}</td>
+                    <td>{{ v | round(4) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
 
+</div>
 
-<style>
-    .section-header {
-        margin-bottom: 16px;
-    }   
-    .section-title {
-        font-size: 1.8rem;
-        font-weight: 700;
-        margin-bottom: 4px;
-        color: #000;
-    }
-    .result-card, .detail-card {
-        max-width: 720px;
-        margin: 24px auto;
-        padding: 24px;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .result-number {
-        font-size: 3.5rem;
-        font-weight: 700;
-        color: #413333;
-    }
-    .result-label {
-        font-size: 1.2rem;
-        color: #666;
-        margin-top: 4px;
-    }
-    .result-level {
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-top: 12px;
-    }
-    .level-low { color: #2e7d32; }
-    .level-medium { color: #f9a825; }
-    .level-high { color: #c62828; }
-    .gauge {
-        width: 100%;
-        height: 16px;
-        background: #e0e0e0;
-        border-radius: 8px;
-        margin: 16px 0;
-        overflow: hidden;
-    }
-
-    .detsil-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 16px;
-    }
-    .detail-table th, .detail-table td {
-        padding: 12px;
-        border-bottom: 1px solid #ddd;
-        text-align: left;
-    }
-    .detail-table th {
-        background: #a79393;
-        font-weight: 600;
-    }
-    .detail-value {
-        font-weight: 500;
-    }
-    .result-note {
-        font-size: 0.9rem;
-        color: #777;
-        margin-top: 12px;
-    }
-    .detail-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px 24px;
-        margin-top: 16px;
-    }
-
-    
-</style>
 {% endblock %}

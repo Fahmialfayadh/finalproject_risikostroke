@@ -1,56 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Stroke Risk Calculator</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 </head>
 
-<body style="background:#f5f7fb;">
+<body>
 
     <!-- ====== HEADER ====== -->
-    <header class="page-hero" style="background:#f5f7fb; box-shadow:none; padding-bottom:10px;">
-        <div class="hero-inner" style="max-width:1080px; margin:0 auto; padding:0 24px;">
-            <div>
-                <h1 class="hero-title" style="color:#222; margin-bottom:6px;">Stroke Risk Calculator</h1>
-                <p class="hero-subtitle" style="color:#555;">
-                    Web-based risk estimation using logistic regression and Weight of Evidence.
-                </p>
-            </div>
-
-            <div class="hero-tag" style="color:#555; border-color:#ccc;">
-                Prototype model · Not a diagnostic tool
-            </div>
-        </div>
-        <!--    home nav-->
-        <div style="position:absolute; top:20px; left: 24px;"> 
-            <a href="/" style="color:#333; font-weight:600; margin-right:16px;">Home</a>
-        </div>
-
-        <!-- Admin Links -->
-        <div style="position:absolute; top:20px; right:24px;">
+    <header class="page-hero">
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
             {% if session.get("admin") %}
-                <a href="/admin" style="color:#333; font-weight:600;">Admin Panel</a> |
-                <a href="/admin/logout" style="color:#333; font-weight:600;">Logout</a>
+            <a href="/admin" class="nav-link">Admin Panel</a>
+            <a href="/admin/logout" class="nav-link">Logout</a>
             {% else %}
-                <a href="/admin" style="color:#333; font-weight:600;">Admin</a>
+            <a href="/admin" class="nav-link">Admin</a>
             {% endif %}
         </div>
 
+        <h1 class="hero-title">Stroke Risk Calculator</h1>
+        <p class="hero-subtitle">
+            Web-based risk estimation using logistic regression and Weight of Evidence.
+        </p>
+
+        <div class="hero-tag">
+            Prototype model · Not a diagnostic tool
+        </div>
     </header>
 
-    <!-- ====== MAIN WRAPPER (NO UNWANTED STYLES) ====== -->
+    <!-- ====== MAIN CONTENT ====== -->
     <main>
         {% block content %}{% endblock %}
     </main>
 
     <!-- ====== FOOTER ====== -->
-    <footer class="disclaimer" style="color:#666; text-align:center; padding:40px 0;">
+    <footer class="disclaimer">
         This application provides an estimated risk score based on the entered data.
     </footer>
 
 </body>
+
 </html>
