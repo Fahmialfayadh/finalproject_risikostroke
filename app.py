@@ -302,6 +302,10 @@ def calc(data):
 # ===========================
 @app.route("/")
 def index():
+    return render_template("about.html")
+
+@app.route("/calculator")
+def calculator():
     return render_template("index.html")
 
 @app.route("/predict", methods=["POST"])
