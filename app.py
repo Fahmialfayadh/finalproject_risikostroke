@@ -7,8 +7,7 @@ from utils import search, merge_sort
 from pdf_generator import generate_pdf_report
 from flask import send_file
 import io 
-
-
+from messages import translations
 
 app = Flask(__name__)
 # password admin
@@ -22,6 +21,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 with app.app_context():
     db.create_all()
+
+@app.context_processor
+def inject_conf_var():
+    lang = session.get('lang', 'id')
+    def t(key):
+        return translations.get(lang, translations['id']).get(key, key)
+    return dict(t=t, lang=lang)
+
+@app.route('/set_language/<language>')
+def set_language(language):
+    session['lang'] = language
+    return redirect(request.referrer or '/')
 
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
@@ -121,9 +132,9 @@ def download_pdf():
 #   VIEW DETAIL RECORD
 
 def calculate_level(prob):
-    if prob < 0.08:
+    if prob < 0.10:
         return "Low"
-    elif prob < 0.20:
+    elif prob < 0.4545:
         return "Moderate"
     else:
         return "High"

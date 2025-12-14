@@ -11,66 +11,66 @@
         <!-- ============================================ -->
         <div class="section-block">
             <div class="section-header">
-                <h2 class="section-title">Patient Information</h2>
-                <div class="section-subtitle">Basic demographic & physiological measurements.</div>
+                <h2 class="section-title">{{ t('patient_info') }}</h2>
+                <div class="section-subtitle">{{ t('patient_subtitle') }}</div>
             </div>
 
             <div class="form-grid">
                 <!-- Full Name -->
                 <div class="form-card">
-                    <label class="form-label">Full Name</label>
+                    <label class="form-label">{{ t('full_name') }}</label>
                     <input class="form-input" name="name" type="text" placeholder="John Doe">
                 </div>
 
                 <!-- Gender -->
                 <div class="form-card">
-                    <label class="form-label">Gender</label>
+                    <label class="form-label">{{ t('gender') }}</label>
                     <select class="form-input" name="gender">
-                        <option>Male</option>
-                        <option>Female</option>
-                        <option>Other</option>
+                        <option value="Male">{{ t('male') }}</option>
+                        <option value="Female">{{ t('female') }}</option>
+                        <option value="Other">{{ t('other') }}</option>
                     </select>
                 </div>
 
                 <!-- Age -->
                 <div class="form-card">
-                    <label class="form-label">Age</label>
+                    <label class="form-label">{{ t('age') }}</label>
                     <input class="form-input" type="number" name="age" min="1" max="120" required>
                 </div>
 
                 <!-- Height -->
                 <div class="form-card">
-                    <label class="form-label">Height (cm)</label>
+                    <label class="form-label">{{ t('height') }}</label>
                     <input class="form-input" type="number" name="height" step="0.1" required>
                 </div>
 
                 <!-- Weight -->
                 <div class="form-card">
-                    <label class="form-label">Weight (kg)</label>
+                    <label class="form-label">{{ t('weight') }}</label>
                     <input class="form-input" type="number" name="weight" step="0.1" required>
                 </div>
 
                 <!-- Glucose -->
                 <div class="form-card">
-                    <label class="form-label">Avg. Glucose (mg/dL)</label>
+                    <label class="form-label">{{ t('glucose') }}</label>
                     <input class="form-input" type="number" name="glucose" step="0.1" required>
                 </div>
 
                 <!-- Hypertension -->
                 <div class="form-card">
-                    <label class="form-label">Hypertension</label>
+                    <label class="form-label">{{ t('hypertension') }}</label>
                     <select class="form-input" name="hypertension">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
+                        <option value="0">{{ t('no') }}</option>
+                        <option value="1">{{ t('yes') }}</option>
                     </select>
                 </div>
 
                 <!-- Heart Disease -->
                 <div class="form-card">
-                    <label class="form-label">Heart Disease</label>
+                    <label class="form-label">{{ t('heart_disease') }}</label>
                     <select class="form-input" name="heart_disease">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
+                        <option value="0">{{ t('no') }}</option>
+                        <option value="1">{{ t('yes') }}</option>
                     </select>
                 </div>
             </div>
@@ -81,54 +81,54 @@
         <!-- ============================================ -->
         <div class="section-block">
             <div class="section-header">
-                <h2 class="section-title">Lifestyle & Profile</h2>
-                <div class="section-subtitle">Social & demographic characteristics.</div>
+                <h2 class="section-title">{{ t('lifestyle_profile') }}</h2>
+                <div class="section-subtitle">{{ t('lifestyle_subtitle') }}</div>
             </div>
 
             <div class="form-grid">
                 <!-- Marriage -->
                 <div class="form-card">
-                    <label class="form-label">Ever married</label>
+                    <label class="form-label">{{ t('ever_married') }}</label>
                     <select class="form-input" name="ever_married">
-                        <option>No</option>
-                        <option>Yes</option>
+                        <option value="No">{{ t('no') }}</option>
+                        <option value="Yes">{{ t('yes') }}</option>
                     </select>
                 </div>
 
                 <!-- Residence -->
                 <div class="form-card">
-                    <label class="form-label">Residence</label>
+                    <label class="form-label">{{ t('residence') }}</label>
                     <select class="form-input" name="residence">
-                        <option>Urban</option>
-                        <option>Rural</option>
+                        <option value="Urban">{{ t('urban') }}</option>
+                        <option value="Rural">{{ t('rural') }}</option>
                     </select>
                 </div>
 
                 <!-- Work Type -->
                 <div class="form-card">
-                    <label class="form-label">Work type</label>
+                    <label class="form-label">{{ t('work_type') }}</label>
                     <select class="form-input" name="work_type">
-                        <option>Private</option>
-                        <option>Self-employed</option>
-                        <option>Govt_job</option>
-                        <option>children</option>
+                        <option value="Private">{{ t('private') }}</option>
+                        <option value="Self-employed">{{ t('self_employed') }}</option>
+                        <option value="Govt_job">{{ t('govt_job') }}</option>
+                        <option value="children">{{ t('children') }}</option>
                     </select>
                 </div>
 
                 <!-- Smoking Status -->
                 <div class="form-card">
-                    <label class="form-label">Smoking status</label>
+                    <label class="form-label">{{ t('smoking_status') }}</label>
                     <select class="form-input" name="smoking">
-                        <option>never smoked</option>
-                        <option>formerly smoked</option>
-                        <option>smokes</option>
-                        <option>Unknown</option>
+                        <option value="never smoked">{{ t('never_smoked') }}</option>
+                        <option value="formerly smoked">{{ t('formerly_smoked') }}</option>
+                        <option value="smokes">{{ t('smokes') }}</option>
+                        <option value="Unknown">{{ t('unknown') }}</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <button type="submit" class="submit-btn">Calculate Risk Score</button>
+        <button type="submit" class="submit-btn">{{ t('calculate_btn') }}</button>
 
     </form>
 </div>

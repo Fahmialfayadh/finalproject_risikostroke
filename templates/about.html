@@ -6,56 +6,33 @@
 
     <div class="section-block">
         <div class="section-header">
-            <h2 class="section-title" style="justify-content: center;">Risk Stratification Methodology</h2>
-            <div class="section-subtitle">Technical overview of the predictive model and thresholding strategy.</div>
+            <h2 class="section-title" style="justify-content: center;">{{ t('about_title') }}</h2>
+            <div class="section-subtitle">{{ t('about_subtitle') }}</div>
         </div>
 
         <!-- CARD: Data Source & Thresholding -->
         <div class="detail-card" style="margin-bottom: 2rem;">
             <!--0. background aplikasi-->
             <h3 class="Background" style="margin-bottom: 1rem;">
-                Background Aplikasi
+                {{ t('background_title') }}
             </h3>
             <p style="color: var(--text-main); line-height: 1.7; margin-bottom: 2rem;">
-                Aplikasi ini merupakan hasil Proyek Akhir (Final Project) mata kuliah Matematika Diskrit semester 1
-                program studi Rekayasa Kecerdasan Artifisial, Departmen Teknik Informatika, Institut Teknologi Sepuluh
-                Nopember.
-                <br>
-                <br>
-                <strong>Tim Pengembang:</strong>
-                <br>
-                1. Fahmi Alfayadh (5054251015)
-                <br>
-                2. Evina Fitriyani (5054251013)
-                <br>
-                3. Aziz Rahmad Arifin (5054251002)
+                {{ t('background_text') | safe }}
             </p>
             <!-- 1. Data Source -->
             <h3 class="detail-title" style="margin-bottom: 1rem;">
-                1. Data Source & Model Architecture
+                {{ t('datasource_title') }}
             </h3>
             <p style="color: var(--text-main); line-height: 1.7; margin-bottom: 2rem;">
-                Sistem prediksi ini dibangun menggunakan algoritma <strong>Logistic Regression</strong>, dilatih
-                menggunakan
-                Healthcare Dataset Stroke Data (bersumber dari repositori publik <a
-                    href="https://www.kaggle.com/datasets/catherinerasgaitis/mxmh-survey-results">Kaggle</a>). Model
-                menghasilkan skor
-                probabilitas kontinu (P(y=1|X)) dalam rentang [0,1] yang merepresentasikan kemungkinan terjadinya stroke
-                berdasarkan fitur klinis dan demografis input.
+                {{ t('datasource_text') | safe }}
             </p>
 
             <!-- 2. Thresholding -->
             <h3 class="detail-title" style="margin-bottom: 1rem;">
-                2. Thresholding Strategy
+                {{ t('thresholding_title') }}
             </h3>
             <p style="color: var(--text-main); line-height: 1.7;">
-                Untuk menerjemahkan probabilitas statistik menjadi wawasan klinis yang dapat ditindaklanjuti, diterapkan
-                pendekatan
-                <strong>Hybrid Thresholding</strong> yang menggabungkan distribusi persentil data (data-driven) dengan
-                metrik
-                evaluasi performa model (performance-driven).
-                <br><br>
-                Klasifikasi risiko dibagi menjadi tiga tingkatan sebagai berikut:
+                {{ t('thresholding_text') | safe }}
             </p>
         </div>
 
@@ -69,113 +46,91 @@
                     style="display: flex; flex-direction: column; gap: 0.75rem; padding: 1.5rem; border-left: 4px solid var(--success-color); background: #f0fdf4; border-radius: 0 8px 8px 0;">
                     <div
                         style="font-weight: 700; font-size: 1.1rem; color: var(--success-color); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                        🟢 Low Risk Category (P < 0.10) </div>
+                        {{ t('low_risk_title') }} </div>
 
-                            <div>
-                                <strong style="color: var(--text-main);">Definisi:</strong> <br>
-                                <span style="color: var(--text-muted);">Kategori ini mencakup individu dengan
-                                    probabilitas prediksi di bawah 10%.</span>
-                            </div>
-
-                            <div>
-                                <strong style="color: var(--text-main);">Justifikasi Metodologis:</strong> <br>
-                                <span style="color: var(--text-muted);">Threshold 0.10 (10%) diadopsi langsung dari
-                                    standar
-                                    profil risiko stroke klinis (seperti <em>Framingham Risk Score</em>). Nilai ini
-                                    divalidasi secara statistik oleh data latih kami, di mana persentil ke-40 berada
-                                    pada
-                                    angka 0.093, menunjukkan bahwa batas klinis 10% sangat
-                                    relevan dan aman untuk menyaring populasi sehat.</span>
-                            </div>
-
-                            <div>
-                                <strong style="color: var(--text-main);">Interpretasi Statistik:</strong> <br>
-                                <span style="color: var(--text-muted);">Analisis densitas menunjukkan bahwa area ini
-                                    didominasi secara signifikan oleh kelas negatif (True Negatives), mengindikasikan
-                                    spesifisitas tinggi dalam menyaring populasi sehat.</span>
-                            </div>
+                    <div>
+                        <strong style="color: var(--text-main);">{{ t('low_risk_def_label') }}</strong> <br>
+                        <span style="color: var(--text-muted);">{{ t('low_risk_def_text') }}</span>
                     </div>
 
-                    <!-- MODERATE RISK -->
-                    <div
-                        style="display: flex; flex-direction: column; gap: 0.75rem; padding: 1.5rem; border-left: 4px solid var(--warning-color); background: #fefce8; border-radius: 0 8px 8px 0;">
-                        <div
-                            style="font-weight: 700; font-size: 1.1rem; color: var(--warning-color); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                            🟡 Moderate Risk Category (0.10 ≤ P ≤ 0.4545)
-                        </div>
-
-                        <div>
-                            <strong style="color: var(--text-main);">Definisi:</strong> <br>
-                            <span style="color: var(--text-muted);">Rentang probabilitas antara 10% hingga
-                                45.45%.</span>
-                        </div>
-
-                        <div>
-                            <strong style="color: var(--text-main);">Justifikasi Metodologis:</strong> <br>
-                            <span style="color: var(--text-muted);">Interval ini merepresentasikan zona transisi (grey
-                                area) antara batas dasar populasi sehat dan batas keputusan optimal model.</span>
-                        </div>
-
-                        <div>
-                            <strong style="color: var(--text-main);">Interpretasi Statistik:</strong> <br>
-                            <span style="color: var(--text-muted);">Area ini menangkap observasi dengan ketidakpastian
-                                model yang lebih tinggi (probabilistic uncertainty), di mana subjek memiliki sejumlah
-                                faktor risiko yang tereskalasi namun belum mencapai ambang batas klasifikasi positif
-                                yang definitif.</span>
-                        </div>
+                    <div>
+                        <strong style="color: var(--text-main);">{{ t('low_risk_just_label') }}</strong> <br>
+                        <span style="color: var(--text-muted);">{{ t('low_risk_just_text') | safe }}</span>
                     </div>
 
-                    <!-- HIGH RISK -->
-                    <div
-                        style="display: flex; flex-direction: column; gap: 0.75rem; padding: 1.5rem; border-left: 4px solid var(--error-color); background: #fef2f2; border-radius: 0 8px 8px 0;">
-                        <div
-                            style="font-weight: 700; font-size: 1.1rem; color: var(--error-color); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                            🔴 High Risk Category (P > 0.4545)
-                        </div>
-
-                        <div>
-                            <strong style="color: var(--text-main);">Definisi:</strong> <br>
-                            <span style="color: var(--text-muted);">Kategori ini mencakup individu dengan probabilitas
-                                prediksi melebihi 45.4%.</span>
-                        </div>
-
-                        <div>
-                            <strong style="color: var(--text-main);">Justifikasi Metodologis:</strong> <br>
-                            <span style="color: var(--text-muted);">Threshold 0.454 (atau 0.4545) diturunkan menggunakan
-                                Youden’s J Statistic (J=Sensitivity+Specificity-1) dari kurva ROC model.</span>
-                        </div>
-
-                        <div>
-                            <strong style="color: var(--text-main);">Interpretasi Statistik:</strong> <br>
-                            <span style="color: var(--text-muted);">Nilai ini merupakan Optimal Cutoff Point yang secara
-                                matematis memaksimalkan kemampuan diskriminatif model dalam memisahkan kelas positif
-                                (Stroke) dan negatif. Probabilitas di atas titik ini mengindikasikan confidence model
-                                yang tinggi terhadap label positif.</span>
-                        </div>
+                    <div>
+                        <strong style="color: var(--text-main);">{{ t('low_risk_stat_label') }}</strong> <br>
+                        <span style="color: var(--text-muted);">{{ t('low_risk_stat_text') }}</span>
                     </div>
-
                 </div>
+
+                <!-- MODERATE RISK -->
+                <div
+                    style="display: flex; flex-direction: column; gap: 0.75rem; padding: 1.5rem; border-left: 4px solid var(--warning-color); background: #fefce8; border-radius: 0 8px 8px 0;">
+                    <div
+                        style="font-weight: 700; font-size: 1.1rem; color: var(--warning-color); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        {{ t('mod_risk_title') }}
+                    </div>
+
+                    <div>
+                        <strong style="color: var(--text-main);">{{ t('mod_risk_def_label') }}</strong> <br>
+                        <span style="color: var(--text-muted);">{{ t('mod_risk_def_text') }}</span>
+                    </div>
+
+                    <div>
+                        <strong style="color: var(--text-main);">{{ t('mod_risk_just_label') }}</strong> <br>
+                        <span style="color: var(--text-muted);">{{ t('mod_risk_just_text') }}</span>
+                    </div>
+
+                    <div>
+                        <strong style="color: var(--text-main);">{{ t('mod_risk_stat_label') }}</strong> <br>
+                        <span style="color: var(--text-muted);">{{ t('mod_risk_stat_text') }}</span>
+                    </div>
+                </div>
+
+                <!-- HIGH RISK -->
+                <div
+                    style="display: flex; flex-direction: column; gap: 0.75rem; padding: 1.5rem; border-left: 4px solid var(--error-color); background: #fef2f2; border-radius: 0 8px 8px 0;">
+                    <div
+                        style="font-weight: 700; font-size: 1.1rem; color: var(--error-color); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        {{ t('high_risk_title') }}
+                    </div>
+
+                    <div>
+                        <strong style="color: var(--text-main);">{{ t('high_risk_def_label') }}</strong> <br>
+                        <span style="color: var(--text-muted);">{{ t('high_risk_def_text') }}</span>
+                    </div>
+
+                    <div>
+                        <strong style="color: var(--text-main);">{{ t('high_risk_just_label') }}</strong> <br>
+                        <span style="color: var(--text-muted);">{{ t('high_risk_just_text') }}</span>
+                    </div>
+
+                    <div>
+                        <strong style="color: var(--text-main);">{{ t('high_risk_stat_label') }}</strong> <br>
+                        <span style="color: var(--text-muted);">{{ t('high_risk_stat_text') }}</span>
+                    </div>
+                </div>
+
             </div>
-
-            <!-- DISCLAIMER -->
-            <div
-                style="margin-top: 3rem; padding: 1.5rem; background-color: #f1f5f9; border-radius: var(--border-radius); border: 1px dashed var(--text-muted);">
-                <h4
-                    style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                    ⚠️ Disclaimer / Penafian
-                </h4>
-                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
-                    Aplikasi ini adalah alat bantu simulasi untuk tujuan edukasi dan penelitian akademis. Hasil prediksi
-                    dihasilkan oleh model matematis dan bukan merupakan diagnosis medis profesional. Jangan gunakan
-                    hasil ini sebagai pengganti konsultasi dengan dokter. Segera hubungi tenaga medis jika Anda
-                    mengalami gejala kesehatan.
-                </p>
-            </div>
-
-            <a href="/calculator" class="submit-btn"
-                style="text-align: center; text-decoration: none; margin-top: 2rem;">Start Calculation</a>
-
         </div>
 
+        <!-- DISCLAIMER -->
+        <div
+            style="margin-top: 3rem; padding: 1.5rem; background-color: #f1f5f9; border-radius: var(--border-radius); border: 1px dashed var(--text-muted);">
+            <h4
+                style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                {{ t('disclaimer_title') }}
+            </h4>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                {{ t('disclaimer_text') }}
+            </p>
+        </div>
+
+        <a href="/calculator" class="submit-btn" style="text-align: center; text-decoration: none; margin-top: 2rem;">{{
+            t('start_calc_btn') }}</a>
+
     </div>
-    {% endblock %}
+
+</div>
+{% endblock %}

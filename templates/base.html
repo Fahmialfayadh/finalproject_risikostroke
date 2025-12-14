@@ -16,23 +16,33 @@
     <!-- ====== HEADER ====== -->
     <header class="page-hero">
         <div class="nav-links">
-            <a href="/" class="nav-link">Home</a>
-            <a href="/calculator" class="nav-link">Calculator</a>
+            <a href="/" class="nav-link">{{ t('home') }}</a>
+            <a href="/calculator" class="nav-link">{{ t('calculator') }}</a>
             {% if session.get("admin") %}
-            <a href="/admin" class="nav-link">Admin Panel</a>
-            <a href="/admin/logout" class="nav-link">Logout</a>
+            <a href="/admin" class="nav-link">{{ t('admin_panel') }}</a>
+            <a href="/admin/logout" class="nav-link">{{ t('logout') }}</a>
             {% else %}
-            <a href="/admin" class="nav-link">Admin</a>
+            <a href="/admin" class="nav-link">{{ t('admin') }}</a>
+            {% endif %}
+
+            <span style="border-left: 1px solid var(--border-color); margin: 0 0.5rem;"></span>
+
+            {% if lang == 'id' %}
+            <a href="/set_language/en" class="nav-link" style="font-weight: 400;">EN</a>
+            <span class="nav-link" style="color: var(--primary-color);">ID</span>
+            {% else %}
+            <span class="nav-link" style="color: var(--primary-color);">EN</span>
+            <a href="/set_language/id" class="nav-link" style="font-weight: 400;">ID</a>
             {% endif %}
         </div>
 
-        <h1 class="hero-title">Stroke Risk Calculator</h1>
+        <h1 class="hero-title">{{ t('hero_title') }}</h1>
         <p class="hero-subtitle">
-            Web-based risk estimation using logistic regression and Weight of Evidence.
+            {{ t('hero_subtitle') }}
         </p>
 
         <div class="hero-tag">
-            Prototype model · Not a diagnostic tool
+            {{ t('hero_tag') }}
         </div>
     </header>
 
@@ -43,7 +53,7 @@
 
     <!-- ====== FOOTER ====== -->
     <footer class="disclaimer">
-        This application provides an estimated risk score based on the entered data.
+        {{ t('footer_disclaimer') }}
     </footer>
 
 </body>

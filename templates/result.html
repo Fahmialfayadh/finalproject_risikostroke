@@ -12,9 +12,9 @@
     <!-- ============================================ -->
     <section class="result-card">
         <div class="section-header" style="text-align: center; margin-bottom: 2rem;">
-            <h2 class="section-title" style="justify-content: center;">Risk Summary</h2>
+            <h2 class="section-title" style="justify-content: center;">{{ t('risk_summary') }}</h2>
             <p class="section-subtitle">
-                Estimated probability of stroke given the submitted profile.
+                {{ t('risk_subtitle') }}
             </p>
         </div>
 
@@ -29,11 +29,11 @@
             <!-- Tampilkan probabilitas dalam persen (dibulatkan 1 desimal) -->
             <div class="result-number">{{ (prob * 100) | round(1) }}%</div>
 
-            <div class="result-label">Estimated stroke risk</div>
+            <div class="result-label">{{ t('estimated_risk') }}</div>
 
             <!-- Level risiko (Level dinamis) -->
             <div class="result-level level-{{ level | lower }}">
-                {{ level }} risk category
+                {{ level }} {{ t('risk_category') }}
             </div>
 
             <!-- Gauge bar visual -->
@@ -43,9 +43,7 @@
 
             <!-- Catatan penting -->
             <div class="result-note">
-                This value reflects the model's predicted probability based on your inputs. It does not represent an
-                absolute
-                risk and should always be interpreted in context of clinical evaluation.
+                {{ t('result_note') }}
             </div>
         </div>
 
@@ -53,11 +51,15 @@
         <!-- DETAIL GRID: BMI & Kategori                 -->
         <!-- ============================================ -->
         <div class="detail-grid">
-            <div><span class="detail-label">BMI</span> <span class="detail-value">{{ bmi | round(1) }}</span></div>
-            <div><span class="detail-label">Age category</span> <span class="detail-value">{{ bins[0] }}</span></div>
-            <div><span class="detail-label">Glucose category</span> <span class="detail-value">{{ bins[1] }}</span>
+            <div><span class="detail-label">{{ t('bmi') }}</span> <span class="detail-value">{{ bmi | round(1) }}</span>
             </div>
-            <div><span class="detail-label">BMI category</span> <span class="detail-value">{{ bins[2] }}</span></div>
+            <div><span class="detail-label">{{ t('age_category') }}</span> <span class="detail-value">{{ bins[0]
+                    }}</span></div>
+            <div><span class="detail-label">{{ t('glucose_category') }}</span> <span class="detail-value">{{ bins[1]
+                    }}</span>
+            </div>
+            <div><span class="detail-label">{{ t('bmi_category') }}</span> <span class="detail-value">{{ bins[2]
+                    }}</span></div>
         </div>
 
         <!-- PDF DOWNLOAD FORM -->
@@ -67,7 +69,7 @@
                 <input type="hidden" name="{{ key }}" value="{{ value }}">
                 {% endfor %}
                 <button type="submit" class="submit-btn" style="background: var(--text-main); margin-top: 0;">
-                    Download Result PDF
+                    {{ t('download_pdf') }}
                 </button>
             </form>
         </div>
@@ -78,70 +80,70 @@
     <!-- ============================================ -->
     <section class="detail-card">
         <div class="detail-header">
-            <h3 class="detail-title">Input Details</h3>
+            <h3 class="detail-title">{{ t('input_details') }}</h3>
             <p class="detail-subtitle">
-                Full profile information used for risk calculation.
+                {{ t('input_subtitle') }}
             </p>
         </div>
 
         <table class="detail-table">
             <thead>
                 <tr>
-                    <th>Field</th>
-                    <th>Value</th>
+                    <th>{{ t('field') }}</th>
+                    <th>{{ t('value') }}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Name</td>
+                    <td>{{ t('full_name') }}</td>
                     <td>{{ data["name"] }}</td>
                 </tr>
                 <tr>
-                    <td>Age</td>
+                    <td>{{ t('age') }}</td>
                     <td>{{ data["age"] }}</td>
                 </tr>
                 <tr>
-                    <td>Gender</td>
+                    <td>{{ t('gender') }}</td>
                     <td>{{ data["gender"] }}</td>
                 </tr>
                 <tr>
-                    <td>Weight</td>
+                    <td>{{ t('weight') }}</td>
                     <td>{{ data["weight"] }} kg</td>
                 </tr>
                 <tr>
-                    <td>Height</td>
+                    <td>{{ t('height') }}</td>
                     <td>{{ data["height"] }} cm</td>
                 </tr>
                 <tr>
-                    <td>BMI</td>
+                    <td>{{ t('bmi') }}</td>
                     <td>{{ bmi | round(1) }}</td>
                 </tr>
                 <tr>
-                    <td>Average Glucose</td>
+                    <td>{{ t('glucose') }}</td>
                     <td>{{ data["glucose"] }}</td>
                 </tr>
                 <tr>
-                    <td>Hypertension</td>
-                    <td>{{ "Yes" if data["hypertension"] == 1 else "No" }}</td>
+                    <td>{{ t('hypertension') }}</td>
+                    <td>{{ t('yes') if data["hypertension"] == 1 else t('no') }}</td>
                 </tr>
                 <tr>
-                    <td>Heart Disease</td>
-                    <td>{{ "Yes" if data["heart_disease"] == 1 else "No" }}</td>
+                    <td>{{ t('heart_disease') }}</td>
+                    <td>{{ t('yes') if data["heart_disease"] == 1 else t('no') }}</td>
                 </tr>
                 <tr>
-                    <td>Ever Married</td>
+                    <td>{{ t('ever_married') }}</td>
                     <td>{{ data["ever_married"] }}</td>
                 </tr>
                 <tr>
-                    <td>Work Type</td>
+                    <td>{{ t('work_type') }}</td>
                     <td>{{ data["work_type"] }}</td>
                 </tr>
                 <tr>
-                    <td>Residence Type</td>
+                    <td>{{ t('residence') }}</td>
                     <td>{{ data["residence"] }}</td>
                 </tr>
                 <tr>
-                    <td>Smoking Status</td>
+                    <td>{{ t('smoking_status') }}</td>
                     <td>{{ data["smoking"] }}</td>
                 </tr>
             </tbody>
@@ -153,9 +155,9 @@
     <!-- ============================================ -->
     <section class="detail-card">
         <div class="detail-header">
-            <h3 class="detail-title">Model Feature Contributions</h3>
+            <h3 class="detail-title">{{ t('model_contributions') }}</h3>
             <p class="detail-subtitle">
-                Linear contributions of each feature (coefficient × WOE) to the logit score.
+                {{ t('contrib_subtitle') }}
             </p>
         </div>
 
@@ -163,8 +165,8 @@
         <table class="detail-table">
             <thead>
                 <tr>
-                    <th>Feature</th>
-                    <th>Contribution</th>
+                    <th>{{ t('feature') }}</th>
+                    <th>{{ t('contribution') }}</th>
                 </tr>
             </thead>
             <tbody>
