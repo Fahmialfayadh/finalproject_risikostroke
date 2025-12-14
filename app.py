@@ -8,11 +8,14 @@ from pdf_generator import generate_pdf_report
 from flask import send_file
 import io 
 from messages import translations
+import os
+import dotenv
+dotenv.load_dotenv()
 
 app = Flask(__name__)
 # password admin
 app.secret_key = "matdishebat"
-ADMIN_PASSWORD = "fpmatdiskeren"
+ADMIN_PASSWORD = os.environ["ADMIN_PASSWORD"]
 # ===========================
 #  DATABASE CONFIG
 # ===========================
