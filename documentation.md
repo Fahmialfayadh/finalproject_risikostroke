@@ -143,16 +143,7 @@ Klasifikasi risiko menggunakan dua titik potong (cut-off points):
 
 ---
 
-## 6. Fitur Administratif & Keamanan
 
-### Session Management
-Login admin tidak menggunakan database user, melainkan *environment variable* tunggal untuk kesederhanaan deployment prototyping.
-```python
-# app.py
-if pw == os.environ["ADMIN_PASSWORD"]:
-    session["admin"] = True
-```
-Middleware check diterapkan pada setiap route admin (`/admin`, `/admin/delete`) untuk mencegah akses tanpa otorisasi.
 
 ### Localization
 Fitur multi-bahasa menggunakan dictionary statis di `messages.py`. Helper function `t(key)` disuntikkan ke konteks template Jinja2 via `@app.context_processor`, memungkinkan pemanggilan `{{ t('home_title') }}` langsung di HTML.
