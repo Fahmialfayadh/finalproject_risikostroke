@@ -4,7 +4,32 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Stroke Risk Calculator</title>
+    <title>Stroke Risk Calculator by Asymptra | Web-based Stroke Risk Estimation</title>
+    <meta name="description" content="Estimate stroke risk using logistic regression and Weight of Evidence. A web-based prototype tool by Asymptra Labs." />
+    <meta name="author" content="Asymptra Labs — asymptra.com" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#7c3aed" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://strokerisk.asymptra.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Stroke Risk Calculator by Asymptra" />
+    <meta property="og:title" content="Stroke Risk Calculator by Asymptra | Web-based Stroke Risk Estimation" />
+    <meta property="og:description" content="Estimate stroke risk using logistic regression and Weight of Evidence. A web-based prototype tool by Asymptra Labs." />
+    <meta property="og:image" content="{{ url_for('static', filename='assets/logo3.png', _external=True) }}" />
+    <meta property="og:url" content="{{ request.url }}" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Stroke Risk Calculator by Asymptra | Web-based Stroke Risk Estimation" />
+    <meta name="twitter:description" content="Estimate stroke risk with AI-powered analysis. By Asymptra Labs." />
+    <meta name="twitter:image" content="{{ url_for('static', filename='assets/logo3.png', _external=True) }}" />
+
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/logo3.png') }}" />
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='assets/logo3.png') }}" />
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
