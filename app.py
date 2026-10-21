@@ -3,7 +3,6 @@ from flask import Flask, redirect, render_template, request, session
 from models import db, StrokeInput
 from flask import make_response
 import json
-from utils import search, merge_sort
 from pdf_generator import generate_pdf_report
 from flask import send_file
 import io 
@@ -48,6 +47,12 @@ def admin_login():
 
     return render_template("admin_login.html")
 
+# ===========================
+#   ADMIN PANEL
+# ===========================
+# import fungsi search dan merge_sort dari utils.py
+from utils import search, merge_sort
+
 @app.route("/admin")
 def admin():
     if not session.get("admin"):
@@ -88,9 +93,7 @@ def admin():
 # ===========================
 #   PDF GENERATION
 # ===========================
-# ===========================
-#   PDF GENERATION
-# ===========================
+
 @app.route("/download_pdf", methods=["POST"])
 def download_pdf():
     # Recalculate using POST data to be safe and consistent
@@ -291,11 +294,11 @@ def calc(data):
         "heart_disease": 1.392570918553818 if data["heart_disease"] == 1 else -0.1623678345990987,
     }
 
-    z = intercept
+    z = intercept #bias dulu
     contrib = {}
-
+    
     for k in coef:
-        c = coef[k] * woe_values[k]
+        c = coef[k] * woe_values[k]     
         contrib[k] = c
         z += c
 
@@ -380,7 +383,7 @@ def predict():
         data=data_input
     )
 
-# =================================
+    # =================================
 #         ALGORITMA REKURSIF
 # ================================= 
 
