@@ -4,6 +4,7 @@ import time
 
 from abc import ABC, abstractmethod
 
+
 class Crypto(ABC):
     def __init__(self, key):
         self.key = key
