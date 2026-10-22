@@ -1,0 +1,33 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+build/
+dist/
+wheels/
+*.egg-info/
+
+# Rust artifacts (sangat penting agar context build tetap kecil dan cepat)
+stroke_calc/target/
+stroke_calc/.cargo/
+
+# Git & Editor
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Environment & logs
+.env
+*.log
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+

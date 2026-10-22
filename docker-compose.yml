@@ -1,0 +1,16 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: finalproject-risikostroke:latest
+    container_name: risikostroke_app
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      # Mount folder instance agar database SQLite persisten di host
+      - ./instance:/app/instance
+    restart: unless-stopped
+
