@@ -4,11 +4,11 @@
 
 :root {
     /* Color Palette */
-    --primary-color: #6366f1;
+    --primary-color: #000003;
     /* Indigo 500 - Vibrant but professional */
-    --primary-hover: #4f46e5;
+    --primary-hover: #43434b;
     /* Indigo 600 */
-    --secondary-color: #ec4899;
+    --secondary-color: #c0bebf;
     /* Pink 500 - Joyful accent */
     --background-color: #f8fafc;
     /* Slate 50 - Clean light background */

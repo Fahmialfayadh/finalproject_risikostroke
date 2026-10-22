@@ -1,0 +1,36 @@
+ ☐ Sinkronkan Alur Simpan di routes/public.py
+
+Sesuaikan blok predict() saat menyimpan data agar menggunakan skema baru:
+
+python
+if form.get("save") == "yes":
+    # 1. Enkripsi seluruh payload data input menjadi string ciphertext
+    ciphertext = encrypt_data(data_input)
+    # 2. Simpan ke model StrokeRecord
+    entry = StrokeRecord(
+        encrypted_payload=ciphertext,
+        ☐ risk_score=prob,
+        user_id=None # atau id user jika ada sesi login
+    )
+    db.session.add(entry)
+    db.session.commit()
+ ☐ Sinkronkan Pembacaan Data di routes/admin.py
+
+Karena data tersimpan dalam bentuk encrypted_payload, admin perlu mendekripsinya saat menampilkan tabel:
+
+Di admin_dashboard(): Dekripsi payload tiap baris untuk mendapatkan name dan age agar tabel dashboard tetap tampil rapi.
+Di admin_view(id): Dekripsi payload untuk merender seluruh detail data pasien di result.html.
+3. Inisialisasi Ulang Database (instance/stroke.db)
+
+Karena struktur tabel lama (StrokeInput dengan 17 kolom terbuka) digantikan oleh tabel baru (stroke_records dan users), hapus file database SQLite lama agar db.create_all() otomatis membuat tabel baru saat aplikasi dijalankan.
+
+ ☐ Buat Halaman Benchmark Perbandingan (AES vs DES vs RC4)
+
+Ini adalah tujuan utama dari proyek Anda:
+
+Tambahkan route @admin_bp.route("/benchmark").
+Ambil sampel teks/data input pasien, lalu ukur waktu eksekusi enkripsi & dekripsi menggunakan time.perf_counter_ns() untuk ketiga algoritma:
+AES-CBC
+DES-CBC
+RC4 (Stream)
+Tampilkan metrik perbandingan (Waktu Enkripsi, Waktu Dekripsi, Ukuran Ciphertext, Validitas) di antarmuka Admin.

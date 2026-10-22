@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-container" style="max-width: 440px; margin: 2rem auto;">
+    <div class="form-card" style="padding: 2.5rem 2rem;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.75rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">
+                {{ t('login') }}
+            </h2>
+            <p style="font-size: 0.925rem; color: var(--text-muted); line-height: 1.4;">
+                {{ t('login_subtitle') }}
+            </p>
+        </div>
+
+        {% if error %}
+        <div style="background-color: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.875rem; margin-bottom: 1.5rem;">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/login" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div>
+                <label for="username" class="form-label">{{ t('username') }}</label>
+                <input type="text" id="username" name="username" class="form-input" required autocomplete="username" autofocus>
+            </div>
+
+            <div>
+                <label for="password" class="form-label">{{ t('password') }}</label>
+                <input type="password" id="password" name="password" class="form-input" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="submit-btn" style="width: 100%; margin: 1rem 0 0.5rem; padding: 0.875rem 1.5rem; font-size: 1rem;">
+                {{ t('login_btn') }}
+            </button>
+        </form>
+
+
+        <div style="text-align: center; margin-top: 1.75rem; font-size: 0.875rem; color: var(--text-muted);">
+            <a href="/register" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">
+                {{ t('dont_have_account') }}
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

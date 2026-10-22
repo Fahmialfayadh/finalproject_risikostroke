@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="user-title">User History</h2>
+
+<div class="sort-bar">
+    <span>Sort:</span>
+
+    <a href="?sort=prediction&order=desc&q={{ request.args.get('q', '') }}">Risk ↓</a>
+    <a href="?sort=prediction&order=asc&q={{ request.args.get('q', '') }}">Risk ↑</a>
+
+    <a href="?sort=age&order=desc&q={{ request.args.get('q', '') }}">Age ↓</a>
+    <a href="?sort=age&order=asc&q={{ request.args.get('q', '') }}">Age ↑</a>
+</div>
+
+
+<div class="user-table-wrapper">
+<table class="user-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>BMI</th>
+            <th>Risk</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for r in data %}
+        <tr onclick="window.location='/user/view/{{ r.id }}'">
+            <td>{{ r.id }}</td>
+            <td>{{ r.name }}</td>
+            <td>{{ r.age }}</td>
+            <td>{{ r.gender }}</td>
+            <td>{{ r.bmi | round(1) }}</td>
+            <td class="risk-cell">{{ (r.prediction * 100) | round(1) }}%</td>
+            <td>
+                <a href="/user/delete/{{ r.id }}" 
+                   class="delete-btn" 
+                   onclick="event.stopPropagation(); return confirm('Delete this record?');">
+                   Delete
+                </a>
+            </td>
+        </tr><form method="GET" action="/user/history"></form>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+
+<div class ='search-bar'>
+    <form method="GET" action="/user/history">
+        <input type="text" name="q" placeholder="Search by name" value="{{ request.args.get('q', '') }}">
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<style>
+:root {
+    --bg: #ffffff;
+    --panel: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --accent: #2563eb;
+    --danger: #dc2626;
+    --header-bg: #f1f5f9;
+    --border: #e2e8f0;
+}
+
+/* MAIN */
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, system-ui, sans-serif;
+}
+
+.user-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 15px;
+}
+
+/* SORT BAR */
+.sort-bar {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    color: var(--muted);
+}
+
+.sort-bar a {
+    margin-left: 10px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.sort-bar a:hover {
+    text-decoration: underline;
+}
+
+/* TOP BAR */
+.user-topbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.logout-btn {
+    padding: 6px 14px;
+    background: #e2e8f0;
+    border-radius: 6px;
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.15s;
+}
+
+.logout-btn:hover {
+    background: #cbd5e1;
+}
+
+/* TABLE WRAPPER */
+.user-table-wrapper {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-top: 10px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+}
+
+/* TABLE */
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    background: var(--panel);
+}
+
+.user-table thead {
+    background: var(--header-bg);
+}
+
+.user-table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+}
+
+.user-table td {
+    padding: 12px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+}
+
+.user-table tbody tr {
+    transition: 0.15s ease;
+}
+
+.user-table tbody tr:hover {
+    background: #f8fafc;
+    cursor: pointer;
+}
+
+/* RISK CELL */
+.risk-cell {
+    font-weight: 600;
+    color: var(--accent);
+}
+
+/* DELETE BUTTON */
+.delete-btn {
+    color: var(--danger);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.delete-btn:hover {
+    text-decoration: underline;
+}
+
+/* SEARCH BAR */
+.search-bar {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-bar input {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: var(--text);
+}
+
+.search-bar button {
+    margin-left: 8px;
+    padding: 6px 14px;
+    background: var(--accent);
+    border: none;
+    color: white;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.search-bar button:hover {
+    background: #1d4ed8;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .user-table th, .user-table td {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+}
+</style>
+
+
+{% endblock %}

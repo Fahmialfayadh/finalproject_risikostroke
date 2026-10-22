@@ -1,24 +1,24 @@
 import json
 import os
 from flask import Blueprint, make_response, redirect, render_template, request, session
-from models import db, StrokeInput
+from crypto.operations import decrypt_record
+from crypto.operations.data_operations import decrypt_record
+from models import db, StrokeRecord
 from stroke_model import calculate_level
 from utils import merge_sort, search
+from crypto import encrypt_data, decrypt_data, decrypt_records
+from stroke_model import calc
+
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
 
 @admin_bp.route("/login", methods=["GET", "POST"])
 def admin_login():
-    admin_password = os.environ.get("ADMIN_PASSWORD", "")
-    if request.method == "POST":
-        pw = request.form.get("password", "")
-        if pw and pw == admin_password:
-            session["admin"] = True
-            return redirect("/admin")
-        return "Wrong admin password."
+    if session.get("admin"):
+        return redirect("/admin")
 
-    return render_template("admin_login.html")
+    return render_template("login.html")
 
 
 @admin_bp.route("/", strict_slashes=False)
@@ -30,14 +30,15 @@ def admin_dashboard():
     q = request.args.get("q", "").strip()
 
     # ambil semua data
-    records = StrokeInput.query.all()
+    _records = db.session.query(StrokeRecord).all()
+    
+    records = decrypt_records(_records)
 
-    # FILTER
     if q:
         records = search(records, q, ["name"])
 
     # SORT
-    sort_key = request.args.get("sort", "prediction")
+    sort_key = request.args.get("sort", "risk_score")
     order = request.args.get("order", "desc")
     reverse = order == "desc"
 
@@ -60,68 +61,42 @@ def admin_dashboard():
     return response
 
 
+from stroke_model import calc
+
 @admin_bp.route("/view/<int:id>")
 def admin_view(id):
     if not session.get("admin"):
-        return redirect("/admin/login")
+        return redirect("/login")
 
-    r = StrokeInput.query.get(id)
+    r = db.session.get(StrokeRecord, id)
     if not r:
         return "Record not found", 404
 
-    # Muat JSON bins & contrib dari database
-    bins = json.loads(r.bins) if r.bins else ["-", "-", "-"]
-    contrib = json.loads(r.contrib) if r.contrib else {}
+    # 1. Dekripsi data_input langsung dari payload
+    data_input = decrypt_data(r.encrypted_payload)
 
-    # Persiapkan data_input seperti form asli
-    data_input = {
-        "name": r.name,
-        "age": r.age,
-        "gender": r.gender,
-        "glucose": r.glucose,
-        "smoking": r.smoking,
-        "weight": r.weight,
-        "height": r.height,
-        "ever_married": r.ever_married,
-        "work_type": r.work_type,
-        "residence": r.residence,
-        "hypertension": r.hypertension,
-        "heart_disease": r.heart_disease,
-    }
+    # 2. Hitung model untuk mendapatkan visual bins dan contrib
+    prob, level, bmi, bins, contrib = calc(data_input)
 
-    response = make_response(
-        render_template(
-            "result.html",
-            prob=r.prediction,
-            level=calculate_level(r.prediction),
-            bmi=r.bmi,
-            bins=bins,
-            contrib=contrib,
-            data=data_input,
-        )
+    return render_template(
+        "result.html",
+        prob=r.risk_score,
+        level=level,
+        bmi=bmi,
+        bins=bins,
+        contrib=contrib,
+        data=data_input,
     )
-
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
-
-    return response
-
 
 @admin_bp.route("/delete/<int:id>")
 def admin_delete(id):
     if not session.get("admin"):
         return redirect("/admin/login")
 
-    record = StrokeInput.query.get(id)
+    record = db.session.query(StrokeRecord).get(id)
     if record:
         db.session.delete(record)
         db.session.commit()
 
     return redirect("/admin")
 
-
-@admin_bp.route("/logout")
-def admin_logout():
-    session.pop("admin", None)  # hapus session admin
-    return redirect("/")

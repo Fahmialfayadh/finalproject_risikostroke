@@ -2,7 +2,8 @@ import json
 from os import environ
 from flask import Blueprint, make_response, redirect, render_template, request, session
 from crypto.exceptions import CryptoMethodError
-from models import db, StrokeInput
+from models import db, StrokeRecord
+from models.strokerecord import StrokeRecord
 from pdf_generator import generate_pdf_report
 from stroke_model import calc
 
@@ -50,31 +51,18 @@ def predict():
     # Hitung model
     prob, level, bmi, bins, contrib = calc(data_input)
 
-    entry = StrokeInput(
-                name=data_input["name"],
-                age=data_input["age"],
-                gender=data_input["gender"],
-                hypertension=data_input["hypertension"],
-                heart_disease=data_input["heart_disease"],
-                glucose=data_input["glucose"],
-                bmi=bmi,
-                smoking=data_input["smoking"],
-                weight=data_input["weight"],
-                height=data_input["height"],
-                ever_married=data_input["ever_married"],
-                work_type=data_input["work_type"],
-                residence=data_input["residence"],
-                prediction=prob,
-                bins=json.dumps(bins),
-                contrib=json.dumps(contrib),
-            )
-
-    encrypted_entry = encrypt_data(entry)  # Encrypt the entry data
-
-    # Jika user memilih SAVE, baru simpan ke database
     if form.get("save") == "yes":
+        # Enkripsi seluruh payload data input menjadi string ciphertext
+        ciphertext = encrypt_data(data_input)
 
-        db.session.add(encrypted_entry)
+        # Simpan ke model StrokeRecord
+        entry = StrokeRecord(
+            encrypted_payload=ciphertext,
+            risk_score=prob,
+            user_id=session.get("user_id")
+        )
+
+        db.session.add(entry)
         db.session.commit()
 
     # Tampilkan hasil prediksi

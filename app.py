@@ -3,7 +3,7 @@ import dotenv
 from flask import Flask, session
 from assets.messages.messages import translations
 from models import db
-from routes import admin_bp, public_bp
+from routes import admin_bp, auth_bp, public_bp, user_bp
 
 dotenv.load_dotenv()
 
@@ -37,7 +37,8 @@ def inject_conf_var():
 # ===========================
 app.register_blueprint(public_bp)
 app.register_blueprint(admin_bp)
-
+app.register_blueprint(auth_bp)
+app.register_blueprint(user_bp)
 
 # ===========================
 #     RUN SERVER

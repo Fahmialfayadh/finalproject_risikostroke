@@ -18,11 +18,19 @@
         <div class="nav-links">
             <a href="/" class="nav-link">{{ t('home') }}</a>
             <a href="/calculator" class="nav-link">{{ t('calculator') }}</a>
+
+            {% if session.get("user_id") %}
+            <a href="/user/history" class="nav-link">Riwayat Saya</a>
+            <a href="/logout" class="nav-link">{{ t('logout') }}</a>
+
+            {% else %}
+            <a href="/login" class="nav-link">{{ t('login') }}</a>
+            <a href="/register" class="nav-link">{{ t('register') }}</a>
+            {% endif %}
+
             {% if session.get("admin") %}
             <a href="/admin" class="nav-link">{{ t('admin_panel') }}</a>
-            <a href="/admin/logout" class="nav-link">{{ t('logout') }}</a>
-            {% else %}
-            <a href="/admin" class="nav-link">{{ t('admin') }}</a>
+
             {% endif %}
 
             <span style="border-left: 1px solid var(--border-color); margin: 0 0.5rem;"></span>
@@ -30,6 +38,7 @@
             {% if lang == 'id' %}
             <a href="/set_language/en" class="nav-link" style="font-weight: 400;">EN</a>
             <span class="nav-link" style="color: var(--primary-color);">ID</span>
+
             {% else %}
             <span class="nav-link" style="color: var(--primary-color);">EN</span>
             <a href="/set_language/id" class="nav-link" style="font-weight: 400;">ID</a>

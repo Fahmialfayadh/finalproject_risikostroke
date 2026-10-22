@@ -4,7 +4,7 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from .strokeinput import StrokeRecord
+    from .strokerecord import StrokeRecord
 
 
 class User(Base):
