@@ -28,11 +28,14 @@ def _safe_int(value, default: int = 0) -> int:
         return default
 
 
-def decrypt_record(record) -> list[dict]:
-    payload = decrypt_data(record.encrypted_payload)
+def decrypt_record(record):
+    try:
+        payload = decrypt_data(record.encrypted_payload)
+    except Exception:
+        payload = {}
 
     # 1. Ekstrak data pasien dari payload
-    record.name = payload.get("name") or ""
+    record.name = payload.get("name") or "Terenkripsi"
     record.age = _safe_float(payload.get("age"), 0.0)
     record.weight = _safe_float(payload.get("weight"), 0.0)
     record.height = _safe_float(payload.get("height"), 1.0)
@@ -51,7 +54,6 @@ def decrypt_record(record) -> list[dict]:
     else:
         record.bmi = 0.0
 
-
     # risk score (ga di encrypt)
     record.prediction = record.risk_score
 
@@ -59,7 +61,4 @@ def decrypt_record(record) -> list[dict]:
 
 
 def decrypt_records(records):
-    return [decrypt_record(r) for r in records]
-
-def decrypt_records(records) -> list[dict]:
     return [decrypt_record(r) for r in records]
