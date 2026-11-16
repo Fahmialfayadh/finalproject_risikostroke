@@ -1,0 +1,73 @@
+{% extends "_share_base.html" %}
+{% block share_content %}
+
+<div class="page-head">
+    <div>
+        <h2>Kunci Asimetris (RSA-2048)</h2>
+        <p>Public key disimpan di sistem untuk enkripsi kunci akses; private key (.pem) disimpan di perangkat Anda.</p>
+    </div>
+    <span class="badge {{ 'badge--approved' if user.public_key else 'badge--pending' }}">
+        {{ 'Public Key Aktif' if user.public_key else 'Belum Ada Kunci' }}
+    </span>
+</div>
+
+{% if has_pending_pem %}
+<div class="alert alert--info" role="status">
+    <div>
+        <strong>File private_key.pem siap diunduh.</strong>
+        Simpan di perangkat Anda sekarang karena file ini hanya tersedia satu kali.
+    </div>
+    <a href="/share/keys/download" class="btn btn--sm btn--primary">Unduh private_key.pem</a>
+</div>
+{% endif %}
+
+<div class="{{ 'share-grid-asym' if user.public_key else '' }}">
+    <section class="panel" aria-labelledby="key-action-heading">
+        <div class="panel-head">
+            <h3 id="key-action-heading" class="panel-title">Manajemen Kunci</h3>
+        </div>
+        <div class="panel-body stack-sm">
+            {% if user.public_key %}
+            <form method="POST" action="/share/keys/generate" onsubmit="return confirm('Generate ulang akan mengganti public key aktif dan membuat file .pem lama tidak berlaku untuk kiriman kunci baru. Lanjutkan?');">
+                <button type="submit" class="btn btn--secondary btn--full">Generate Ulang Kunci RSA (.pem)</button>
+            </form>
+            <p class="field-hint">
+                Generate ulang mengganti public key Anda di sistem; file .pem lama tidak lagi berlaku untuk kiriman kunci baru.
+            </p>
+            {% else %}
+            <form method="POST" action="/share/keys/generate">
+                <button type="submit" class="btn btn--primary">Generate Pasangan Kunci RSA (.pem)</button>
+            </form>
+            <p class="field-hint">
+                Pasangan kunci RSA-2048 diperlukan agar Anda dapat mengirim permintaan akses dan mendekripsi kunci dari pemilik data.
+            </p>
+            {% endif %}
+        </div>
+    </section>
+
+    {% if user.public_key %}
+    <section class="panel" aria-labelledby="pubkey-heading">
+        <div class="panel-head">
+            <h3 id="pubkey-heading" class="panel-title">Public Key Tersimpan (PEM)</h3>
+            <button type="button" class="btn btn--sm btn--secondary" onclick="copyPubKey(this)">Salin</button>
+        </div>
+        <div class="panel-body">
+            <textarea id="saved-pubkey" readonly rows="7" class="mono-textarea">{{ user.public_key }}</textarea>
+        </div>
+    </section>
+    {% endif %}
+</div>
+
+<script>
+function copyPubKey(btn) {
+    const el = document.getElementById("saved-pubkey");
+    if (!el) return;
+    navigator.clipboard.writeText(el.value).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = "Tersalin";
+        setTimeout(() => { btn.textContent = orig; }, 1600);
+    });
+}
+</script>
+
+{% endblock %}

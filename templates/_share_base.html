@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block body_class %}share-page{% endblock %}
+{% block footer_class %}disclaimer--compact{% endblock %}
+
+{% block page_header %}
+<header class="share-topbar">
+    <div class="share-topbar-inner">
+        <div class="share-topbar-brand">
+            <a href="/" class="topbar-title">{{ t('hero_title') }}</a>
+            <span class="topbar-sep" aria-hidden="true">/</span>
+            <span class="topbar-section">Berbagi Data</span>
+        </div>
+
+        <nav class="share-topbar-nav" aria-label="Navigasi utama">
+            <a href="/" class="topbar-link">{{ t('home') }}</a>
+            <a href="/calculator" class="topbar-link">{{ t('calculator') }}</a>
+            {% if session.get("user_id") %}
+            <a href="/user/history" class="topbar-link">Riwayat Saya</a>
+            <a href="/share" class="topbar-link is-current">Berbagi Data</a>
+            <a href="/logout" class="topbar-link">{{ t('logout') }}</a>
+            {% else %}
+            <a href="/login" class="topbar-link">{{ t('login') }}</a>
+            <a href="/register" class="topbar-link">{{ t('register') }}</a>
+            {% endif %}
+            {% if session.get("admin") %}
+            <a href="/admin" class="topbar-link">{{ t('admin_panel') }}</a>
+            {% endif %}
+
+            <span class="topbar-divider" aria-hidden="true"></span>
+
+            <span class="lang-switch" aria-label="Pilihan bahasa">
+                {% if lang == 'id' %}
+                <a href="/set_language/en" class="lang-opt">EN</a>
+                <span class="lang-opt is-active">ID</span>
+                {% else %}
+                <span class="lang-opt is-active">EN</span>
+                <a href="/set_language/id" class="lang-opt">ID</a>
+                {% endif %}
+            </span>
+        </nav>
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="share-wrap">
+    {% include "_share_shell.html" %}
+    {% block share_content %}{% endblock %}
+</div>
+{% endblock %}

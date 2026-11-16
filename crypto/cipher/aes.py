@@ -18,27 +18,32 @@ class AES(Crypto):
         self.key = key
         self.block_size = AESCipher.block_size 
 
-    def encrypt(self, data: str) -> str:
+    def encrypt_bytes(self, data: bytes) -> bytes:
         # Generate cipher baru (IV otomatis dibuat acak oleh PyCryptodome)
         cipher = AESCipher.new(self.key, AESCipher.MODE_CBC)
-        padded_data = pad(data.encode('utf-8'), self.block_size)
+        padded_data = pad(data, self.block_size)
 
         ciphertext = cipher.encrypt(padded_data)
         
         # Gabungkan IV (16 bytes) + Ciphertext (bytes)
-        raw_result = cipher.iv + ciphertext
+        return cipher.iv + ciphertext
+
+    def decrypt_bytes(self, raw_data: bytes) -> bytes:
+        # Ekstrak IV (16 bytes pertama) dan ciphertext
+        iv = raw_data[:16]
+        ct = raw_data[16:]
+        
+        cipher = AESCipher.new(self.key, AESCipher.MODE_CBC, iv)
+        return unpad(cipher.decrypt(ct), self.block_size)
+
+    def encrypt(self, data: str) -> str:
+        raw_result = self.encrypt_bytes(data.encode('utf-8'))
         
         # Ubah ke Base64 string
         return base64.b64encode(raw_result).decode('utf-8')
 
     def decrypt(self, data: str) -> str:
         raw_data = base64.b64decode(data)
-        
-        # Ekstrak IV (16 bytes pertama) dan ciphertext
-        iv = raw_data[:16]
-        ct = raw_data[16:]
-        
-        cipher = AESCipher.new(self.key, AESCipher.MODE_CBC, iv)
-        pt = unpad(cipher.decrypt(ct), self.block_size)
+        pt = self.decrypt_bytes(raw_data)
         
         return pt.decode('utf-8')

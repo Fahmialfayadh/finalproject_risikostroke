@@ -1,0 +1,159 @@
+{% extends "_share_base.html" %}
+{% block share_content %}
+
+<div class="page-head">
+    <div>
+        <h2>Berbagi Akses Data</h2>
+        <p>Ajukan permintaan ke pengguna lain atau setujui permintaan masuk untuk membagikan kunci akses terenkripsi RSA.</p>
+    </div>
+</div>
+
+{% if not user.public_key %}
+<div class="alert alert--info" role="status">
+    <span>Pasangan kunci RSA belum aktif. Buat kunci terlebih dahulu sebelum mengirim permintaan akses.</span>
+    <a href="/share/keys" class="btn btn--sm btn--primary">Buat Kunci RSA</a>
+</div>
+{% endif %}
+
+<section class="action-strip" aria-label="Ajukan permintaan akses">
+    {% if other_users %}
+    <form method="POST" action="/share/request" class="action-strip-form">
+        <label for="owner-select" class="strip-label">Minta Akses ke</label>
+        <select id="owner-select" name="owner_id" required class="input-control" {{ 'disabled' if not user.public_key else '' }}>
+            <option value="">Pilih pemilik data...</option>
+            {% for u in other_users %}
+            <option value="{{ u.id }}">{{ u.username }}{{ '' if u.public_key else ' (belum aktivasi RSA)' }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn--primary" {{ 'disabled' if not user.public_key else '' }}>Kirim Permintaan</button>
+    </form>
+    {% else %}
+    <p class="field-hint">Belum ada pengguna lain yang terdaftar di sistem.</p>
+    {% endif %}
+</section>
+
+<div class="share-grid-2">
+    <section class="panel" aria-labelledby="incoming-heading">
+        <div class="panel-head">
+            <h3 id="incoming-heading" class="panel-title">
+                Permintaan Masuk
+                <span class="count-pill">{{ incoming|length }}</span>
+            </h3>
+            <span class="panel-meta">Persetujuan pemilik data</span>
+        </div>
+
+        {% if incoming %}
+        <div class="table-wrap">
+            <table class="clean-table">
+                <thead>
+                    <tr>
+                        <th>Peminta</th>
+                        <th>Status</th>
+                        <th class="col-actions">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in incoming %}
+                    <tr>
+                        <td>
+                            <span class="cell-strong">{{ r.requester.username }}</span>
+                            <span class="cell-sub">{{ r.created_at.strftime('%Y-%m-%d %H:%M') if r.created_at else '-' }}</span>
+                        </td>
+                        <td><span class="badge badge--{{ r.status|lower }}">{{ r.status }}</span></td>
+                        <td class="col-actions">
+                            {% if r.status == 'PENDING' %}
+                            <form method="POST" action="/share/approve/{{ r.id }}" class="inline-form">
+                                <button type="submit" class="btn btn--sm btn--primary">Approve</button>
+                            </form>
+                            {% elif r.status == 'APPROVED' %}
+                            <form method="POST" action="/share/revoke/{{ r.id }}" class="inline-form">
+                                <button type="submit" class="btn btn--sm btn--danger" onclick="return confirm('Cabut akses pengguna ini?');">Revoke</button>
+                            </form>
+                            {% else %}
+                            <span class="cell-muted">Dicabut</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% set key_id = r.id|string %}
+                    {% if r.status == 'APPROVED' and key_id in outbox_keys %}
+                    <tr class="outbox-row">
+                        <td colspan="3">
+                            <p class="outbox-label">Ciphertext Kunci untuk {{ r.requester.username }} (kirim via WA atau Email)</p>
+                            <textarea readonly rows="2" class="mono-textarea" id="cipher-{{ r.id }}">{{ outbox_keys[key_id] }}</textarea>
+                            <div class="inline-bar" style="margin-top: 0.45rem;">
+                                <button type="button" class="btn btn--sm btn--secondary" onclick="copyText('cipher-{{ r.id }}', this)">Salin Teks</button>
+                                <a href="{{ wa_links[key_id] }}" target="_blank" rel="noopener" class="btn btn--sm btn--secondary">WhatsApp</a>
+                                <a href="{{ mailto_links[key_id] }}" class="btn btn--sm btn--secondary">Email</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty-state">Belum ada permintaan akses masuk dari pengguna lain.</p>
+        {% endif %}
+    </section>
+
+    <section class="panel" aria-labelledby="outgoing-heading">
+        <div class="panel-head">
+            <h3 id="outgoing-heading" class="panel-title">
+                Permintaan Saya &amp; Akses Diterima
+                <span class="count-pill">{{ outgoing|length }}</span>
+            </h3>
+            <span class="panel-meta">Riwayat permintaan</span>
+        </div>
+
+        {% if outgoing %}
+        <div class="table-wrap">
+            <table class="clean-table">
+                <thead>
+                    <tr>
+                        <th>Pemilik Data</th>
+                        <th>Status</th>
+                        <th class="col-actions">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in outgoing %}
+                    <tr>
+                        <td>
+                            <span class="cell-strong">{{ r.owner.username }}</span>
+                            <span class="cell-sub">{{ r.created_at.strftime('%Y-%m-%d %H:%M') if r.created_at else '-' }}</span>
+                        </td>
+                        <td><span class="badge badge--{{ r.status|lower }}">{{ r.status }}</span></td>
+                        <td class="col-actions">
+                            {% if r.status == 'APPROVED' %}
+                            <a href="/share/unlock/{{ r.id }}" class="btn btn--sm btn--primary">Buka Data</a>
+                            {% elif r.status == 'PENDING' %}
+                            <span class="cell-muted">Menunggu</span>
+                            {% else %}
+                            <span class="cell-muted">Akses dicabut</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty-state">Anda belum mengajukan permintaan akses. Pilih pemilik data di atas untuk memulai.</p>
+        {% endif %}
+    </section>
+</div>
+
+<script>
+function copyText(id, btn) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    navigator.clipboard.writeText(el.value).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = "Tersalin";
+        setTimeout(() => { btn.textContent = orig; }, 1600);
+    });
+}
+</script>
+
+{% endblock %}

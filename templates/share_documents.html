@@ -1,0 +1,76 @@
+{% extends "_share_base.html" %}
+{% block share_content %}
+
+<div class="page-head">
+    <div>
+        <h2>Dokumen &amp; Gambar Privat</h2>
+        <p>File dienkripsi dengan AES-CBC dan kuncinya dibungkus Master Key sebelum disimpan.</p>
+    </div>
+</div>
+
+<div class="share-grid-asym">
+    <section class="panel" aria-labelledby="upload-heading">
+        <div class="panel-head">
+            <h3 id="upload-heading" class="panel-title">Unggah File Baru</h3>
+            <span class="panel-meta">Maks. 5 MB</span>
+        </div>
+        <div class="panel-body">
+            <form method="POST" action="/share/documents/upload" enctype="multipart/form-data" class="stack-sm">
+                <div>
+                    <label for="doc-file" class="field-label">Pilih Berkas</label>
+                    <input id="doc-file" type="file" name="document" accept="image/*,.pdf,.doc,.docx,.txt" required class="input-control input-control--file">
+                </div>
+                <p class="field-hint">Format yang didukung: gambar, PDF, DOC/DOCX, atau TXT.</p>
+                <button type="submit" class="btn btn--primary btn--full">Enkripsi &amp; Simpan</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="panel" aria-labelledby="docs-heading">
+        <div class="panel-head">
+            <h3 id="docs-heading" class="panel-title">
+                Daftar Berkas Tersimpan
+                <span class="count-pill">{{ my_docs|length }}</span>
+            </h3>
+            <span class="panel-meta">Terenkripsi</span>
+        </div>
+
+        {% if my_docs %}
+        <div class="table-wrap">
+            <table class="clean-table">
+                <thead>
+                    <tr>
+                        <th>Nama File</th>
+                        <th>Diunggah</th>
+                        <th class="col-actions">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in my_docs %}
+                    <tr>
+                        <td>
+                            <span class="cell-strong">{{ doc.filename }}</span>
+                            <span class="cell-sub cell-mono">{{ doc.mime_type }}</span>
+                        </td>
+                        <td class="cell-num cell-muted">{{ doc.created_at.strftime('%Y-%m-%d %H:%M') if doc.created_at else '-' }}</td>
+                        <td class="col-actions">
+                            <span class="action-group">
+                                <a href="/share/documents/{{ doc.id }}" target="_blank" class="link-action">Lihat</a>
+                                <a href="/share/documents/{{ doc.id }}?download=1" class="link-action">Unduh</a>
+                                <form method="POST" action="/share/documents/{{ doc.id }}/delete" class="inline-form">
+                                    <button type="submit" class="link-danger" onclick="return confirm('Hapus dokumen ini?');">Hapus</button>
+                                </form>
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty-state">Belum ada berkas tersimpan. Unggah dokumen atau gambar medis di panel sebelah kiri untuk ikut dibagikan saat Anda menyetujui akses.</p>
+        {% endif %}
+    </section>
+</div>
+
+{% endblock %}

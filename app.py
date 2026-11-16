@@ -1,15 +1,16 @@
 import os
 import dotenv
 from flask import Flask, session
+from sqlalchemy import text
 from assets.messages.messages import translations
 from models import db
-from routes import admin_bp, auth_bp, public_bp, user_bp
+from routes import admin_bp, auth_bp, public_bp, share_bp, user_bp
 
 dotenv.load_dotenv()
 
 app = Flask(__name__)
 # Session Secret Key
-app.secret_key = "matdishebat"
+app.secret_key = os.environ.get("SECRET_KEY", "matdishebat")
 
 # ===========================
 #  DATABASE CONFIG
@@ -39,12 +40,22 @@ app.register_blueprint(public_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(user_bp)
+app.register_blueprint(share_bp)
+
+
+def ensure_schema():
+    db.create_all()
+    cols = [row[1] for row in db.session.execute(text("PRAGMA table_info(users)")).fetchall()]
+    if "public_key" not in cols:
+        db.session.execute(text("ALTER TABLE users ADD COLUMN public_key TEXT"))
+        db.session.commit()
+
 
 # ===========================
 #     RUN SERVER
 # ===========================
 if __name__ == "__main__":
     with app.app_context():
-        db.create_all()
+        ensure_schema()
         print("Database siap → stroke.db dibuat")
     app.run(debug=True)

@@ -9,8 +9,9 @@ import json
 
 from .get_cipher import get_cipher
 
-def encrypt_data(data: dict) -> dict:
-    cipher = get_cipher() 
+
+def encrypt_data(data: dict, key=None, method=None) -> str:
+    cipher = get_cipher(method=method, key=key)
 
     json_data = json.dumps(data)
 

@@ -1,0 +1,201 @@
+{% extends "_share_base.html" %}
+{% block share_content %}
+
+<div class="page-head">
+    <div>
+        <a href="/share" class="back-link">&larr; Kembali ke Berbagi Akses</a>
+        <h2>Akses Data Privat: {{ req.owner.username }}</h2>
+        <p>Masukkan ciphertext kunci dari WhatsApp atau Email beserta Private Key (.pem) untuk membuka data.</p>
+    </div>
+</div>
+
+{% if error %}
+<div class="alert alert--error" role="alert">{{ error }}</div>
+{% endif %}
+
+<section class="panel">
+    <details {{ 'open' if bundle is none else '' }}>
+        <summary class="panel-head unlock-summary">
+            <span class="panel-title">{{ 'Form Dekripsi (buka ulang dengan kunci lain)' if bundle is not none else 'Masukkan Kunci Akses & Private Key (.pem)' }}</span>
+            <span class="panel-meta">{{ 'Klik untuk ubah kunci' if bundle is not none else 'RSA-OAEP' }}</span>
+        </summary>
+        <div class="panel-body">
+            <form method="POST" action="/share/unlock/{{ req.id }}" enctype="multipart/form-data" class="unlock-form">
+                <div class="share-grid-2">
+                    <div>
+                        <label class="field-label" for="enc-key">Ciphertext Symmetric Key (dari WA / Email)</label>
+                        <textarea id="enc-key" name="encrypted_key" rows="5" required class="mono-textarea" placeholder="Tempel teks Base64 terenkripsi RSA di sini...">{{ request.form.get('encrypted_key', '') }}</textarea>
+                    </div>
+
+                    <div class="stack-sm">
+                        <div>
+                            <label class="field-label" for="pem-file">Unggah File Private Key (.pem)</label>
+                            <input id="pem-file" type="file" name="private_key_file" accept=".pem,.txt" class="input-control input-control--file">
+                        </div>
+
+                        <div>
+                            <label class="field-label" for="pem-text">Atau tempel isi Private Key (.pem)</label>
+                            <textarea id="pem-text" name="private_key_text" rows="2" class="mono-textarea" placeholder="-----BEGIN RSA PRIVATE KEY-----">{{ request.form.get('private_key_text', '') }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unlock-actions">
+                    <button type="submit" class="btn btn--primary">Dekripsi &amp; Buka Data</button>
+                </div>
+            </form>
+        </div>
+    </details>
+</section>
+
+{% if bundle is not none %}
+<section class="panel" aria-labelledby="records-heading">
+    <div class="panel-head">
+        <h3 id="records-heading" class="panel-title">
+            Rekam Medis Risiko Stroke
+            <span class="count-pill">{{ bundle.records|length }}</span>
+        </h3>
+    </div>
+
+    {% if bundle.records %}
+    <div class="table-wrap">
+        <table class="clean-table">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Usia</th>
+                    <th>Gender</th>
+                    <th>Glukosa</th>
+                    <th>Merokok</th>
+                    <th>Skor Risiko</th>
+                    <th>Tanggal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rec in bundle.records %}
+                <tr>
+                    <td class="cell-strong">{{ rec.name }}</td>
+                    <td class="cell-num">{{ rec.age }}</td>
+                    <td>{{ rec.gender }}</td>
+                    <td class="cell-num">{{ rec.glucose }}</td>
+                    <td>{{ rec.smoking }}</td>
+                    <td class="risk-val cell-num">{{ rec.risk_score }}%</td>
+                    <td class="cell-num cell-muted">{{ rec.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="empty-state">Pemilik data belum memiliki riwayat kalkulasi risiko stroke.</p>
+    {% endif %}
+</section>
+
+<section class="panel" aria-labelledby="shared-docs-heading">
+    <div class="panel-head">
+        <h3 id="shared-docs-heading" class="panel-title">
+            Gambar &amp; Dokumen Privat
+            <span class="count-pill">{{ bundle.documents|length }}</span>
+        </h3>
+    </div>
+
+    {% if bundle.documents %}
+    <div class="panel-body">
+        <div class="doc-grid">
+            {% for doc in bundle.documents %}
+            <div class="doc-item">
+                <div class="doc-info">
+                    <strong class="cell-strong">{{ doc.filename }}</strong>
+                    <span class="cell-mono">{{ doc.mime_type }}</span>
+                </div>
+                {% if doc.mime_type.startswith('image/') %}
+                <div class="doc-img">
+                    <img src="/share/file/{{ req.id }}/{{ loop.index0 }}" alt="{{ doc.filename }}">
+                </div>
+                {% endif %}
+                <div class="inline-bar">
+                    <a href="/share/file/{{ req.id }}/{{ loop.index0 }}" target="_blank" class="btn btn--sm btn--secondary">Buka</a>
+                    <a href="/share/file/{{ req.id }}/{{ loop.index0 }}?download=1" class="btn btn--sm btn--primary">Unduh</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <p class="empty-state">Pemilik data belum melampirkan gambar atau dokumen privat.</p>
+    {% endif %}
+</section>
+{% endif %}
+
+<style>
+.back-link {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #2563eb;
+    text-decoration: none;
+    margin-bottom: 0.3rem;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.unlock-summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+.unlock-summary::-webkit-details-marker {
+    display: none;
+}
+
+.unlock-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+}
+
+.unlock-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.risk-val {
+    font-weight: 700;
+    color: #2563eb;
+}
+
+.doc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.875rem;
+}
+
+.doc-item {
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.doc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.doc-img img {
+    width: 100%;
+    max-height: 220px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    object-fit: contain;
+    background: #f8fafc;
+}
+</style>
+
+{% endblock %}
